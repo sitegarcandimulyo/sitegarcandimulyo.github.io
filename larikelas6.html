@@ -1,0 +1,2820 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Si Tegar - Lomba Lari Kelas 6</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --p1-color: #e74c3c;
+            /* Merah */
+            --p1-bg: #fadbd8;
+            --p2-color: #3498db;
+            /* Biru */
+            --p2-bg: #d6eaf8;
+            --track-bg: #d6402e;
+            /* Merah Bata Stadion Atletik */
+            --line-color: #ffffff;
+            /* Garis Putih Jelas */
+            --text-color: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            /* Overriding style.css for game viewport */
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* --- ANIMASI LATAR BELAKANG (Dashboard Style) --- */
+        .animated-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            background: linear-gradient(135deg, #FF6F61, #6B5B95, #88B04B, #F7CAC9, #92A8D1);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            animation: float 15s infinite linear;
+            bottom: -150px;
+            opacity: 0.8;
+            filter: blur(5px);
+        }
+
+        .circle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            animation-duration: 12s;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .circle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            left: 25%;
+            animation-duration: 16s;
+            background: rgba(255, 255, 255, 0.4);
+            animation-delay: 2s;
+        }
+
+        .circle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 40%;
+            animation-duration: 10s;
+            background: rgba(255, 255, 255, 0.3);
+            animation-delay: 4s;
+        }
+
+        .circle:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            left: 60%;
+            animation-duration: 18s;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .circle:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            left: 75%;
+            animation-duration: 14s;
+            background: rgba(255, 255, 255, 0.3);
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+                border-radius: 50%;
+            }
+
+            50% {
+                transform: translateY(-50vh) rotate(180deg);
+                opacity: 0.5;
+                border-radius: 40% 60% 50% 50%;
+            }
+
+            100% {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        /* --- DASHBOARD / LOGIN SCREEN CONTAINER --- */
+        #main-dashboard,
+        #login-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            background: none;
+        }
+
+        #login-screen {
+            display: none;
+        }
+
+        .login-container {
+            background: rgba(26, 32, 44, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 720px;
+            max-width: 95%;
+            aspect-ratio: 16/9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+            max-height: 95vh;
+            overflow-y: hidden;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        
+        .login-container h2 {
+            color: #ffffff;
+        }
+
+        /* DASHBOARD UTAMA (LOMBA LARI) */
+        .dashboard-header {
+            color: #1e3a50;
+        }
+
+        .dashboard-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 5px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #34495e;
+        }
+
+        .dashboard-header .subtitle {
+            font-size: 1rem;
+            color: #5d6d7e;
+            font-weight: 500;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header i.fa-running {
+            color: #e67e22;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            transform: rotate(0deg);
+        }
+
+        /* Style untuk tombol pilihan mode */
+        .mode-selection {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .mode-selection button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            width: 180px;
+            height: 150px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .mode-selection button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-color: #3498db;
+        }
+
+        .mode-selection button i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .mode-selection button .mode-text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .mode-selection button .mode-tagline {
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        #btn-2-player i {
+            color: #f1c40f;
+        }
+
+        #btn-4-player i {
+            color: #2ecc71;
+        }
+
+        /* REGISTRATION FORM STYLES */
+        h2 {
+            margin: 0 0 10px 0;
+            color: #ffffff;
+            font-size: 1.5rem;
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .identity-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+        .identity-section label {
+            color: #ffffff !important;
+        }
+
+        .school-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .players-grid-input {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .input-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+            color: #34495e;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .player-input-box {
+            padding: 8px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .p1-box {
+            background-color: var(--p1-bg);
+            border: 1px solid var(--p1-color);
+        }
+
+        .p2-box {
+            background-color: var(--p2-bg);
+            border: 1px solid var(--p2-color);
+        }
+
+        .player-input-box label {
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: #000000 !important;
+        }
+        .player-input-box input {
+            color: #000000 !important;
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            border: 1px solid rgba(0, 0, 0, 0.3) !important;
+        }
+        .player-input-box input::placeholder {
+            color: rgba(0, 0, 0, 0.6) !important;
+        }
+
+        #start-btn {
+            margin-top: 5px;
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        #start-btn.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .player-input-box.hidden {
+            display: none;
+        }
+
+        #back-to-menu {
+            margin-top: 10px;
+            background: transparent;
+            color: var(--primary-color, #00f2ea);
+            border: 1px solid var(--primary-color, #00f2ea);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        #back-to-menu:hover {
+            background: var(--primary-color, #00f2ea);
+            color: var(--dark-bg, #121222);
+        }
+
+        /* --- AREA GAME --- */
+        #game-screen {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        /* Animasi Scrolling (Pelan dari kanan ke kiri) */
+        @keyframes scrollTrack {
+            from { background-position: 0 0, 0 0; }
+            to { background-position: -52px 0, 0 0; } /* Vertikal tetap, horizontal bergerak -52px */
+        }
+        
+        @keyframes scrollStadiumImg {
+            from { background-position-x: 0; }
+            to { background-position-x: -10000px; }
+        }
+
+        /* LINTASAN BALAP LARI (Stadion Style) */
+        .race-track-area {
+            height: 75%;
+            background-color: var(--track-bg);
+            background-image:
+                repeating-linear-gradient(90deg, transparent 0, transparent 50px, rgba(255, 255, 255, 0.15) 50px, rgba(255, 255, 255, 0.15) 52px),
+                repeating-linear-gradient(0deg, transparent 0, transparent 50px, rgba(0, 0, 0, 0.1) 50px, rgba(0, 0, 0, 0.1) 52px);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 0; /* Rapat ke bawah */
+            overflow: hidden;
+            border-top: 4px solid #27ae60;
+            border-bottom: 4px solid #27ae60;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+            /* Tambahkan animasi lintasan bergeser */
+            animation: scrollTrack 0.6s linear infinite;
+        }
+
+        /* Penonton Atas Stadion (Gambar) */
+        .race-track-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30%; /* Sedikit diperlebar agar gambar lebih jelas */
+            background: url('stadium_crowd.png') repeat-x center bottom;
+            background-size: auto 100%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            z-index: 0;
+            border-bottom: 4px solid #fff;
+            /* Tambahkan animasi penonton bergeser (sedikit lebih pelan u/ efek paralaks) */
+            animation: scrollStadiumImg 150s linear infinite;
+        }
+
+        .start-text {
+            z-index: 2;
+        }
+
+        /* Mode 2 Pemain: Lintasan ditata di bawah berdekatan */
+        .race-track-area.two-player {
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Tinggi jalur diperbesar agar sangat luas untuk berlari */
+        .race-track-area.two-player .track-lane {
+            height: 33%;
+            border-top: 3px solid var(--line-color);
+            border-bottom: 3px solid var(--line-color);
+        }
+
+        .track-lane {
+            position: relative;
+            height: 33%;
+            /* Cukup lebar untuk 2 jalur besar */
+            width: 100%;
+            border-top: 3px solid var(--line-color);
+            border-bottom: 3px solid var(--line-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .track-lane.hidden {
+            display: none;
+        }
+
+        /* Nomor Jalur */
+        .lane-number {
+            position: absolute;
+            left: 2%;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 900;
+            font-family: 'Arial Black', sans-serif;
+            z-index: 0;
+            transform: skew(-10deg);
+        }
+
+        /* Garis Start - DIPINDAH KE PALING KIRI */
+        .start-line {
+            position: absolute;
+            left: 0%;
+            /* Terbatas pada area lari (di bawah stadion 30%) */
+            top: 30%;
+            bottom: 0;
+            width: 8px;
+            background-color: white;
+            z-index: 1;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Teks Start - DIPINDAH AGAR BERADA DI DEPAN GARIS */
+        .start-text {
+            position: absolute;
+            left: 1%;
+            /* Setelah garis start 0% */
+            top: 65%; /* Berada di tengah-tengah area lari (rata-rata 30% s.d 100%) */
+            transform: translateY(-50%) rotate(-90deg);
+            color: white;
+            font-weight: 800;
+            letter-spacing: 3px;
+            font-size: 2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Garis Finish */
+        .finish-line {
+            position: absolute;
+            right: 5%;
+            top: 30%; /* Berada di bawah area stadion penonton */
+            bottom: 0;
+            width: 25px;
+            background-image: repeating-linear-gradient(45deg, #000, #000 10px, #fff 10px, #fff 20px);
+            z-index: 1;
+            border-left: 3px solid white;
+            border-right: 3px solid white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .bike {
+            position: absolute;
+            left: 1%;
+            /* Posisi awal tepat setelah garis start */
+            width: 120px;
+            height: 100px;
+            transition: left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .bike img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* QUIZ AREA (25% LAYAR - BERJAJAR 4 KOLOM) */
+        .quiz-area {
+            height: 25%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+
+        .quiz-area.two-player {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .quiz-area.one-player {
+            grid-template-columns: 1fr;
+        }
+
+                .player-zone {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            overflow-y: auto;
+            border: none;
+            background: #fff;
+            border-radius: 4px;
+            gap: 0;
+            height: 100%;
+            min-height: 0;
+        }
+
+        .player-zone::-webkit-scrollbar {
+            width: 4px;
+        }
+        .player-zone::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .player-zone::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .player-zone.hidden {
+            display: none;
+        }
+
+        .zone-p1, .zone-p2 {
+            background-color: #fff;
+            border-color: transparent;
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffe6e6;
+            padding: 2px 6px;
+            min-height: 20px;
+            border-bottom: 2px solid #1a202c;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .p-name {
+            text-transform: uppercase;
+            width: auto;
+            text-align: left;
+            font-size: 11px;
+            color: #d32f2f;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .p-stats {
+            width: auto;
+            text-align: right;
+            font-size: 11px;
+            color: #d32f2f;
+        }
+
+        .question-box {
+            flex-grow: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: clamp(12px, 1.2vw + 1vh, 16px);
+            font-weight: 800;
+            color: #fff;
+            background: #0f172a;
+            padding: clamp(6px, 1vh, 12px) 8px;
+            margin: 0;
+            white-space: normal;
+            border-bottom: 2px solid #1a202c;
+            min-height: clamp(40px, 6vh, 60px);
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .option-btn {
+            padding: 0 8px;
+            border: none;
+            border-radius: 0 !important;
+            background: #f8fafc;
+            color: #333;
+            font-size: clamp(11px, 1vw + 0.8vh, 15px);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: clamp(35px, 5vh, 45px);
+            width: 100%;
+            line-height: 1.2;
+            word-wrap: break-word;
+            white-space: normal;
+            margin: 0;
+            flex-shrink: 0;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Degradasi warna antar pilihan ganda */
+        .option-btn:nth-child(1) { background: #ffffff; }
+        .option-btn:nth-child(2) { background: #f1f5f9; }
+        .option-btn:nth-child(3) { background: #e8eef5; }
+        .option-btn:nth-child(4) { background: #dde7f0; }
+        
+        .option-btn.disabled {
+            pointer-events: none;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background-color: #f8fafc;
+        }
+
+        .option-btn:active, .option-btn.selected-answer {
+            background-color: #C9DDED !important;
+            color: #fff !important;
+        }
+
+        /* ===== MODE GAMBAR: Grid 3 kolom ===== */
+        .option-img-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            padding: 1px;
+            background: #f0f4f8;
+            flex-direction: unset !important;
+        }
+
+        @media (max-width: 400px) {
+            .option-img-grid {
+                grid-template-columns: repeat(3, 1fr);
+                padding: 1px;
+            }
+        }
+
+        .option-img-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 1px;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            gap: 2px;
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.1s;
+            margin: 1px;
+        }
+
+        .option-img-btn img {
+            width: 100%;
+            max-width: 110px;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .option-img-btn span {
+            font-size: clamp(9px, 1.2vw, 12px);
+            font-weight: 600;
+            color: #334155;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .option-img-btn:hover:not(.disabled) {
+            border-color: #3b82f6;
+            background: #eff6ff;
+            transform: scale(1.03);
+        }
+
+        .option-img-btn.selected-answer {
+            border-color: #3b82f6 !important;
+            background: #C9DDED !important;
+        }
+
+        .option-img-btn.selected-answer span {
+            color: #1e3a5f;
+        }
+
+        .option-img-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* ===== MODE 2 PEMAIN: gambar tetap jelas di zona lebih sempit ===== */
+        .quiz-area.two-player .option-img-grid {
+            padding: 0;
+            gap: 0;
+        }
+
+        .quiz-area.two-player .option-img-btn {
+            padding: 0;
+            gap: 1px;
+            margin: 0;
+            overflow: hidden;
+            border-radius: 4px;
+            border-width: 1px;
+        }
+
+        /* Kunci: gambar pakai height tetap agar tidak meluap dari container */
+        .quiz-area.two-player .option-img-btn img {
+            width: 100%;
+            height: clamp(55px, 8vw, 90px);
+            object-fit: cover;
+            border-radius: 3px;
+            aspect-ratio: unset;
+        }
+
+        .quiz-area.two-player .option-img-btn span {
+            font-size: clamp(7px, 0.9vw, 10px);
+            line-height: 1.1;
+            padding: 0 1px;
+        }
+
+
+        /* Saat ada gambar di 2-player, quiz-area dan player-zone menyesuaikan */
+        .quiz-area.two-player.has-img-mode {
+            height: 38%;
+        }
+
+        .quiz-area.two-player.has-img-mode + .race-track-area,
+        .race-track-area.two-player.shrink-for-img {
+            height: 62%;
+        }
+
+        .option-btn.selected-answer { /* no effect */ }
+
+        .correct-feedback { /* no effect */ }
+
+        .wrong-feedback { /* no effect */ }
+
+        /* no shake */
+
+        /* ===== LOADING ANALYSIS SCREEN ===== */
+        #loading-analysis-screen {
+            display: none;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loading-analysis-box {
+            text-align: center;
+            padding: 40px 50px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            max-width: 420px;
+            width: 90%;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50%       { transform: scale(1.15); }
+        }
+
+        .loading-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 0 0 8px;
+        }
+
+        .loading-subtitle {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            margin: 0 0 24px;
+            min-height: 22px;
+            transition: all 0.4s ease;
+        }
+
+        .loading-bar-wrap {
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            height: 14px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+            transition: width 0.12s linear;
+            box-shadow: 0 0 12px rgba(96,165,250,0.7);
+        }
+
+        .loading-percent {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #60a5fa;
+            letter-spacing: 1px;
+        }
+
+        #result-screen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 200;
+            color: white;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #winner-text {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #f1c40f;
+        }
+
+        #loading-msg {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        /* Styles for two-player results summary */
+        #two-player-results-container {
+            display: none;
+            /* Hidden by default, shown for 2 players */
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .player-summary-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #2c3e50;
+            width: 100%;
+            max-width: 350px;
+            /* Max width for each player box */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 2px solid transparent;
+        }
+
+        .player-summary-box.p1-border {
+            border-color: var(--p1-color);
+        }
+
+        .player-summary-box.p2-border {
+            border-color: var(--p2-color);
+        }
+
+        .player-summary-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+
+        .player-summary-box .dominant-style-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e67e22;
+        }
+
+        .player-summary-box .style-counts {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .player-summary-box .reco-btn-player {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        .player-summary-box .reco-btn-player:hover {
+            background-color: #2980b9;
+        }
+
+
+        /* Ultra-wide / 4K+ screens (2560px ke atas) */
+        @media (min-width: 2560px) {
+
+            /* Dashboard Utama */
+            .login-container {
+                padding: 60px 80px;
+                max-width: 900px;
+                gap: 30px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 6rem;
+            }
+
+            .dashboard-header .subtitle {
+                font-size: 1.8rem;
+                max-width: 600px;
+            }
+
+            .dashboard-header i.fa-running {
+                font-size: 5rem;
+                margin-bottom: 20px;
+            }
+
+            .mode-selection {
+                gap: 40px;
+                margin-top: 50px;
+            }
+
+            .mode-selection button {
+                padding: 30px;
+                width: 280px;
+                height: 220px;
+                border-radius: 25px;
+            }
+
+            .mode-selection button i {
+                font-size: 6rem;
+                margin-bottom: 15px;
+            }
+
+            .mode-selection button .mode-text {
+                font-size: 1.8rem;
+            }
+
+            .mode-selection button .mode-tagline {
+                font-size: 1.2rem;
+            }
+
+            #back-to-home-dashboard {
+                margin-top: 40px;
+                padding: 18px 40px;
+                font-size: 1.8rem;
+                border-radius: 40px;
+                max-width: 400px;
+                /* Lebarkan tombol */
+            }
+
+            /* Halaman Registrasi */
+            #login-screen .login-container {
+                padding: 40px 60px;
+                max-width: 1000px;
+                gap: 25px;
+            }
+
+            #setup-title {
+                font-size: 3.5rem;
+                margin-bottom: 20px;
+            }
+
+            .topic-grid,
+            .school-row,
+            .players-grid-input {
+                gap: 20px;
+            }
+
+            .input-group label {
+                font-size: 1.2rem;
+                margin-bottom: 5px;
+            }
+
+            input,
+            select {
+                padding: 15px;
+                font-size: 1.5rem;
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: #ffffff;
+            }
+            input::placeholder, select::placeholder {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            .player-input-box label {
+                font-size: 1.3rem;
+            }
+
+            #start-btn,
+            #back-to-menu {
+                padding: 18px 30px;
+                font-size: 2rem;
+                border-radius: 40px;
+                margin-top: 20px;
+            }
+
+            /* Area Permainan */
+            .race-track-area {
+                height: 70%;
+                /* Lebih besar untuk arena balap */
+                padding: 30px 0;
+            }
+
+            .track-lane {
+                height: 22%;
+                /* Menyesuaikan untuk 4 jalur */
+                border-width: 5px;
+                /* Garis jalur lebih tebal */
+            }
+
+            .race-track-area.two-player .track-lane {
+                height: 35%;
+                /* Lebih besar untuk 2 jalur */
+            }
+
+            .lane-number {
+                font-size: 4rem;
+                left: 1%;
+            }
+
+            .start-line {
+                width: 12px;
+            }
+
+            .start-text {
+                left: 2%;
+                font-size: 3rem;
+            }
+
+            .finish-line {
+                right: 3%;
+                width: 40px;
+                /* Garis finish lebih lebar */
+                background-image: repeating-linear-gradient(45deg, #000, #000 15px, #fff 15px, #fff 30px);
+                border-left: 5px solid white;
+                border-right: 5px solid white;
+            }
+
+            .bike {
+                width: 180px;
+                /* Ukuran pelari lebih besar */
+                height: 150px;
+                left: 3%;
+                /* Sesuaikan posisi awal */
+            }
+
+            .quiz-area {
+                height: 30%;
+                /* Lebih kecil untuk kontrol kuis */
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .player-zone {
+                padding: 8px;
+                border-radius: 10px;
+                border-width: 3px;
+            }
+
+            .player-header {
+                padding: 4px 8px;
+                font-size: 1rem;
+                margin-bottom: 5px;
+            }
+
+            .p-name,
+            .p-stats {
+                font-size: 1.1rem;
+            }
+
+            .question-box {
+                padding: 10px;
+                font-size: 1.4rem;
+                min-height: 70px;
+                margin-bottom: 8px;
+            }
+
+            .options-grid {
+                gap: 5px;
+            }
+
+            .option-btn {
+                padding: 8px 5px;
+                font-size: 1.2rem;
+                min-height: 50px;
+                border-radius: 8px;
+            }
+
+            /* Layar Hasil */
+            #result-screen {
+                padding: 40px;
+            }
+
+            #winner-text {
+                font-size: 4.5rem;
+                margin-bottom: 30px;
+            }
+
+            #loading-msg {
+                font-size: 1.5rem;
+                margin-top: 20px;
+            }
+
+            #result-screen button {
+                padding: 18px 40px;
+                font-size: 1.8rem;
+                border-radius: 40px;
+            }
+
+            .result-actions {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+                margin-top: 25px;
+            }
+
+            .result-actions button {
+                padding: 12px 25px;
+                font-size: 1.2rem;
+                border-radius: 30px;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.2s, transform 0.2s;
+            }
+
+            #view-recommendation-btn,
+            #self-learn-ai-btn,
+            #two-player-reco-btn-p1,
+            #two-player-reco-btn-p2 {
+                background-color: #3498db;
+                color: white;
+            }
+
+            #view-recommendation-btn:hover,
+            #self-learn-ai-btn:hover,
+            #two-player-reco-btn-p1:hover,
+            #two-player-reco-btn-p2:hover {
+                background-color: #2980b9;
+                transform: translateY(-2px);
+            }
+
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN - MOBILE FIRST APPROACH
+           ============================================ */
+
+        /* Small Phones (320px - 374px) */
+        @media (max-width: 374px) {
+
+            /* Login Screen */
+            #setup-title {
+                font-size: 1.3rem;
+            }
+
+            .player-input-box label {
+                font-size: 1rem;
+            }
+
+            input,
+            select {
+                padding: 10px;
+                font-size: 1rem;
+            }
+
+            #start-btn,
+            #back-to-menu {
+                padding: 12px 20px;
+                font-size: 1.2rem;
+                min-height: 44px;
+            }
+
+            /* Race Track */
+            .race-track-area {
+                height: 65vh;
+                padding: 10px 0;
+            }
+
+            .lane-number {
+                font-size: 2rem;
+                left: 2%;
+            }
+
+            .start-text {
+                font-size: 1.5rem;
+            }
+
+            .bike {
+                width: 80px;
+                height: 65px;
+            }
+
+            /* Quiz Area */
+            .quiz-area {
+                height: 35vh;
+                padding: 5px;
+                gap: 5px;
+            }
+
+            .player-header {
+                font-size: 0.7rem;
+                padding: 3px 6px;
+            }
+
+            .p-name,
+            .p-stats {
+                font-size: 0.75rem;
+            }
+
+            .question-box {
+                font-size: 0.75rem;
+                padding: 6px;
+                min-height: 50px;
+                margin-bottom: 5px;
+            }
+
+            .answer-btn {
+                font-size: 0.7rem;
+                padding: 8px 10px;
+                min-height: 44px;
+            }
+
+            /* Result Screen */
+            #result-screen h1 {
+                font-size: 1.3rem;
+            }
+
+            .player-summary-box {
+                padding: 10px;
+                margin: 8px 0;
+            }
+
+            .player-summary-box h3 {
+                font-size: 1rem;
+            }
+
+            .dominant-style-text {
+                font-size: 0.9rem;
+            }
+
+            .reco-btn-player {
+                font-size: 0.8rem;
+                padding: 10px;
+                min-height: 44px;
+            }
+        }
+
+        /* Standard Phones (375px - 428px) */
+        @media (min-width: 375px) and (max-width: 428px) {
+
+            /* Login */
+            #setup-title {
+                font-size: 1.5rem;
+            }
+
+            input,
+            select {
+                padding: 12px;
+                font-size: 1.1rem;
+            }
+
+            #start-btn {
+                font-size: 1.4rem;
+                padding: 14px 24px;
+            }
+
+            /* Race & Quiz */
+            .lane-number {
+                font-size: 2.5rem;
+            }
+
+            .bike {
+                width: 100px;
+                height: 80px;
+            }
+
+            .question-box {
+                font-size: 0.85rem;
+                padding: 8px;
+                min-height: 55px;
+            }
+
+            .answer-btn {
+                font-size: 0.8rem;
+                padding: 10px 12px;
+            }
+
+            .player-header {
+                font-size: 0.8rem;
+            }
+
+            .p-name,
+            .p-stats {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Large Phones (429px - 767px) */
+        @media (min-width: 429px) and (max-width: 767px) {
+            .lane-number {
+                font-size: 3rem;
+            }
+
+            .bike {
+                width: 120px;
+                height: 100px;
+            }
+
+            .question-box {
+                font-size: 0.95rem;
+                padding: 10px;
+                min-height: 60px;
+            }
+
+            .answer-btn {
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
+
+            .player-header {
+                font-size: 0.9rem;
+            }
+
+            .p-name,
+            .p-stats {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Tablet Portrait (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .question-box {
+                font-size: 1.1rem;
+                padding: 12px;
+            }
+
+            .answer-btn {
+                font-size: 1rem;
+                padding: 12px 18px;
+            }
+
+            .bike {
+                width: 140px;
+                height: 120px;
+            }
+
+            .player-header {
+                font-size: 1rem;
+            }
+
+            #setup-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Landscape Mode - Phones & Tablets */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .race-track-area {
+                height: 70%;
+                padding: 5px 0;
+            }
+
+            .quiz-area {
+                height: 30%;
+                padding: 5px;
+            }
+
+            .question-box {
+                font-size: 0.75rem;
+                min-height: 40px;
+                padding: 5px;
+                margin-bottom: 3px;
+            }
+
+            .answer-btn {
+                font-size: 0.7rem;
+                padding: 6px 10px;
+                min-height: 40px;
+            }
+
+            .player-header {
+                font-size: 0.7rem;
+                padding: 2px 5px;
+                margin-bottom: 3px;
+            }
+
+            .bike {
+                width: 90px;
+                height: 70px;
+            }
+
+            .lane-number {
+                font-size: 2rem;
+            }
+
+            /* Login Screen in Landscape */
+            #login-screen {
+                padding: 10px;
+            }
+
+            #setup-title {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+
+            .player-input-box {
+                margin-bottom: 8px;
+            }
+
+            input,
+            select {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+
+            #start-btn {
+                padding: 10px 20px;
+                font-size: 1.1rem;
+                margin-top: 10px;
+            }
+
+            /* Result Screen in Landscape */
+            #result-screen {
+                padding: 10px;
+            }
+
+            #result-content {
+                padding: 15px;
+            }
+
+            #result-screen h1 {
+                font-size: 1.3rem;
+                margin-bottom: 10px;
+            }
+
+            .player-summary-box {
+                padding: 10px;
+                margin: 5px 0;
+            }
+
+            #two-player-results-container {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .reco-btn-player {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Touch-friendly improvements for mobile */
+        @media (max-width: 767px) {
+
+            /* ===== FIX MOBILE SCROLLING ===== */
+            /* Ensure game screen fits exactly in viewport */
+            body {
+                overflow: hidden !important;
+                height: 100vh;
+                width: 100vw;
+            }
+
+            /* Adjust layout proportions so quiz area is larger on mobile */
+            .race-track-area {
+                height: 65% !important;
+            }
+            .quiz-area {
+                height: 35% !important;
+            }
+
+            /* Adjust question box for mobile so it leaves room for buttons */
+            .question-box {
+                flex-grow: 0 !important;
+                max-height: 40% !important;
+                font-size: 0.85rem !important;
+                padding: 4px !important;
+                margin-bottom: 2px !important;
+            }
+
+            /* Login screen scrollable if content overflows */
+            #login-screen {
+                overflow-y: auto;
+                height: 100vh;
+                padding: 20px 10px;
+            }
+
+            #login-screen .login-container {
+                height: auto;
+                max-height: none;
+                overflow-y: visible;
+            }
+
+            /* Result screen scrollable */
+            #result-screen {
+                overflow-y: auto;
+                height: auto;
+                min-height: 100vh;
+                padding: 20px 10px 80px;
+            }
+
+            #result-content {
+                height: auto;
+                max-height: none;
+                overflow-y: visible;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            /* Game screen adjustments */
+            #game-screen {
+                height: 100vh;
+                overflow: hidden;
+                flex-direction: column;
+            }
+
+            /* ===== TOUCH TARGETS ===== */
+            /* Ensure all buttons meet minimum touch target */
+            button,
+            .option-btn,
+            .reco-btn-player {
+                min-height: 44px;
+                min-width: 44px;
+                touch-action: manipulation;
+            }
+
+            /* Add spacing between touch targets */
+            .options-grid {
+                gap: 0;
+            }
+
+            .option-btn {
+                margin: 0;
+            }
+
+            /* Improve form inputs for mobile */
+            input,
+            select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                border: 2px solid #ddd;
+            }
+
+            input:focus,
+            select:focus {
+                border-color: #3498db;
+                outline: none;
+            }
+
+            /* Prevent zoom on input focus (iOS) */
+            input,
+            select,
+            textarea {
+                font-size: 16px !important;
+            }
+
+            /* Better spacing for result buttons */
+            .result-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .result-actions button {
+                width: 100%;
+                min-height: 48px;
+            }
+
+            /* Stack player results on small screens */
+            #two-player-results-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .player-summary-box {
+                width: 100%;
+            }
+
+            /* Enable scrolling for quiz area */
+            .player-zone {
+                overflow-y: auto !important;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+            }
+
+            /* Custom scrollbar for webkit browsers (Chrome, Safari, etc.) */
+            .player-zone::-webkit-scrollbar {
+                width: 5px;
+            }
+
+            .player-zone::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .player-zone::-webkit-scrollbar-thumb {
+                background-color: rgba(0, 0, 0, 0.2);
+                border-radius: 10px;
+            }
+        }
+
+        /* Very Small Devices - Additional Adjustments */
+        @media (max-width: 320px) {
+            .question-box {
+                font-size: 0.7rem;
+                padding: 5px;
+                min-height: 45px;
+            }
+
+            .option-btn {
+                font-size: 0.65rem;
+                padding: 4px 5px;
+            }
+
+            .bike {
+                width: 70px;
+                height: 55px;
+            }
+
+            .lane-number {
+                font-size: 1.8rem;
+            }
+
+            .p-name,
+            .p-stats {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Tablet Landscape & Small Laptops (1024px - 1365px) */
+        @media (min-width: 1024px) and (max-width: 1365px) {
+            .container {
+                max-width: 95%;
+            }
+
+            .question-box {
+                font-size: 1.2rem;
+            }
+
+            .option-btn {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* --- SHINE EFFECT FOR BUTTONS AND FEATURES --- */
+        button, .btn, .mode-selection button, .reco-btn-player, .quiz-btn, .option-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before, .btn::before, .mode-selection button::before, .reco-btn-player::before, .quiz-btn::before, .option-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            transition: all 0.5s ease;
+            z-index: 10;
+            pointer-events: none; /* Supaya kilauan tidak mengganggu klik */
+        }
+
+        button:hover::before, .btn:hover::before, .mode-selection button:hover::before, .reco-btn-player:hover::before, .quiz-btn:hover::before, .option-btn:hover::before {
+            left: 150%;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar navbar-expand-lg navbar-dark p-3 px-md-4 mb-0 shadow-sm" style="flex-shrink: 0; background: rgba(26, 32, 44, 0.95); z-index: 1000; border-bottom: 3px solid rgba(255, 255, 255, 0.1);">
+        <div class="container-fluid">
+            <a href="index.html" class="navbar-brand fw-bold">SI TEGAR</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i>Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="kuesioner.html"><i class="fas fa-tasks me-1"></i>Kuesioner</a></li>
+                    <li class="nav-item"><a class="nav-link" href="rekomendasi.html"><i class="fas fa-chart-bar me-1"></i>Rekomendasi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sumber.html"><i class="fas fa-book me-1"></i>Sumber</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://aplikasiaigaya.github.io/index.html"><i class="fas fa-robot me-1"></i>AI Gaya Belajar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="log.html"><i class="fas fa-comment-dots me-1"></i>Log & Umpan Balik</a></li>
+                    <li class="nav-item"><a class="nav-link" href="statistik.html"><i class="fas fa-chart-pie me-1"></i>Statistik</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div id="main-content-wrapper" style="flex: 1; position: relative; width: 100%; overflow: hidden;">
+        <div class="animated-background"></div>
+        <div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div>
+        
+    <!-- DASHBOARD UTAMA (Pilih Mode) -->
+    <div id="main-dashboard" style="display: flex; position: absolute; z-index: 110; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.2); backdrop-filter: blur(5px);">
+        <div class="dashboard-header" style="text-align: center; background: rgba(26, 32, 44, 0.95); padding: 40px; width: 720px; aspect-ratio: 16/9; max-width: 95%; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255, 255, 255, 0.1);">
+            <img src="logo.png" alt="Logo Si Tegar" style="max-width: 150px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">
+            <h1 style="color: #ffffff; font-weight: 800; margin-top: 15px; font-size: 2.5rem; text-shadow: 0 0 10px rgba(255,255,255,0.3);">LOMBA LARI KELAS 6</h1>
+            <p class="subtitle" style="font-weight: bold; color: #94a3b8; font-size: 1.2rem;">Pilih Mode Permainan</p>
+            <div class="mode-selection d-flex justify-content-center gap-4 mt-4 flex-wrap">
+                <button id="btn-1-player" onclick="showPlayerSetup(1)" class="btn btn-outline-primary" style="width: 160px; height: 150px; border-radius: 15px; border-width: 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s; background: rgba(255, 255, 255, 0.05);">
+                    <i class="fas fa-user mb-3 text-primary" style="font-size: 3rem;"></i>
+                    <span class="mode-text fs-5 fw-bold text-white">1 Pemain</span>
+                </button>
+                <button id="btn-2-player" onclick="showPlayerSetup(2)" class="btn btn-outline-warning" style="width: 160px; height: 150px; border-radius: 15px; border-width: 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s; background: rgba(255, 255, 255, 0.05);">
+                    <i class="fas fa-user-friends mb-3 text-warning" style="font-size: 3rem;"></i>
+                    <span class="mode-text fs-5 fw-bold text-white">2 Pemain</span>
+                </button>
+            </div>
+            <button onclick="window.location.href='index.html'" class="btn btn-secondary mt-4 w-100 fw-bold" style="border-radius: 12px; padding: 12px;">Kembali ke Beranda</button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD FASE (Pilih Fase) -->
+    <div id="phase-selection-screen" style="display: none; position: absolute; z-index: 110; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.2); backdrop-filter: blur(5px);">
+        <div class="dashboard-header" style="text-align: center; background: rgba(26, 32, 44, 0.95); padding: 40px; width: 720px; aspect-ratio: 16/9; max-width: 95%; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255, 255, 255, 0.1);">
+            <img src="logo.png" alt="Logo Si Tegar" style="max-width: 150px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">
+            <h1 style="color: #ffffff; font-weight: 800; margin-top: 15px; font-size: 2.5rem; text-shadow: 0 0 10px rgba(255,255,255,0.3);">PILIH FASE</h1>
+            <p class="subtitle" style="font-weight: bold; color: #94a3b8; font-size: 1.2rem;">Pilih Fase Kelas</p>
+            <div class="mode-selection d-flex justify-content-center gap-4 mt-4 flex-wrap">
+                <button onclick="selectPhase('bawah')" class="btn btn-outline-primary" style="width: 160px; height: 150px; border-radius: 15px; border-width: 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s; background: rgba(255, 255, 255, 0.05);">
+                    <i class="fas fa-child mb-3 text-primary" style="font-size: 3rem;"></i>
+                    <span class="mode-text fs-5 fw-bold text-white">Fase Kelas Bawah</span>
+                </button>
+                <button onclick="selectPhase('atas')" class="btn btn-outline-warning" style="width: 160px; height: 150px; border-radius: 15px; border-width: 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s; background: rgba(255, 255, 255, 0.05);">
+                    <i class="fas fa-user-graduate mb-3 text-warning" style="font-size: 3rem;"></i>
+                    <span class="mode-text fs-5 fw-bold text-white">Fase Kelas Atas</span>
+                </button>
+            </div>
+            <button onclick="returnToDashboardFromPhase()" class="btn btn-secondary mt-4 w-100 fw-bold" style="border-radius: 12px; padding: 12px;">Kembali</button>
+        </div>
+    </div>
+
+    <!-- HALAMAN REGISTRASI -->
+    <div id="login-screen" style="display: none;">
+        <div class="login-container">
+            <h2 id="setup-title">Registrasi 2 Pelari</h2>
+
+            <div class="identity-section">
+                <div class="school-row">
+                    <div class="input-group">
+                        <label>Asal Sekolah</label>
+                        <input type="text" id="shared-school" placeholder="Nama Sekolah" onkeyup="checkInputs()">
+                    </div>
+                    <div class="input-group">
+                        <label>Kecamatan</label>
+                        <input type="text" id="shared-kecamatan" placeholder="Nama Kecamatan" onkeyup="checkInputs()">
+                    </div>
+                    <div class="input-group">
+                        <label>Kabupaten</label>
+                        <input type="text" id="shared-kabupaten" placeholder="Nama Kabupaten" onkeyup="checkInputs()">
+                    </div>
+                </div>
+
+                <div class="players-grid-input" id="player-inputs">
+                    <div class="player-input-box p1-box">
+                        <label style="color: var(--p1-color);">Pelari 1 (Merah)</label>
+                        <input type="text" id="p1-name" placeholder="Nama..." onkeyup="checkInputs()">
+                    </div>
+                    <div class="player-input-box p2-box">
+                        <label style="color: var(--p2-color);">Pelari 2 (Biru)</label>
+                        <input type="text" id="p2-name" placeholder="Nama..." onkeyup="checkInputs()">
+                    </div>
+                </div>
+            </div>
+
+            <button id="start-btn" onclick="startGame()">MULAI LOMBA!</button>
+            <button id="back-to-menu" onclick="returnToDashboard()">Kembali ke Menu Utama</button>
+        </div>
+    </div>
+
+    <!-- AREA PERMAINAN -->
+    <div id="game-screen">
+        <div class="race-track-area">
+            <div class="start-text">START</div>
+            <div class="start-line"></div>
+            <div class="finish-line"></div>
+
+            <!-- Jalur P1 (RUNNER) -->
+            <div class="track-lane p1-track">
+                <div class="bike" id="bike-p1" style="left: 1%;">
+                    <img src="https://images2.imgbox.com/de/32/eH8Ad7bQ_o.png" alt="Player 1 Icon"
+                        style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+            </div>
+            <!-- Jalur P2 (RUNNER) -->
+            <div class="track-lane p2-track">
+                <div class="bike" id="bike-p2" style="left: 1%;">
+                    <img src="https://images2.imgbox.com/97/78/3xBWK4lU_o.png" alt="Player 2 Icon"
+                        style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ AREA -->
+        <div class="quiz-area" id="quiz-area-container">
+            <!-- P1 -->
+            <div class="player-zone zone-p1" id="zone-p1">
+                <div class="player-header">
+                    <div id="disp-p1-name" class="p-name">P1</div>
+                    <div class="p-stats"><span id="score-p1" style="display:none;">0</span><span id="q-count-p1">1/20</span></div>
+                </div>
+                <div class="question-box" id="q-box-p1">Memuat...</div>
+                <div class="options-grid" id="opts-p1"></div>
+            </div>
+            <!-- P2 -->
+            <div class="player-zone zone-p2" id="zone-p2">
+                <div class="player-header">
+                    <div id="disp-p2-name" class="p-name">P2</div>
+                    <div class="p-stats"><span id="score-p2" style="display:none;">0</span><span id="q-count-p2">1/20</span></div>
+                </div>
+                <div class="question-box" id="q-box-p2">Memuat...</div>
+                <div class="options-grid" id="opts-p2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOADING ANALYSIS SCREEN -->
+    <div id="loading-analysis-screen">
+        <div class="loading-analysis-box">
+            <div class="loading-icon">🧠</div>
+            <h2 class="loading-title">Menganalisis Gaya Belajar...</h2>
+            <p class="loading-subtitle" id="loading-phase-text">Membaca pola jawaban...</p>
+            <div class="loading-bar-wrap">
+                <div class="loading-bar-fill" id="loading-bar-fill"></div>
+            </div>
+            <div class="loading-percent" id="loading-percent-text">0%</div>
+        </div>
+    </div>
+
+    <!-- HASIL -->
+    <div id="result-screen">
+        <div id="result-content">
+            <h1 id="winner-text">Hasil Kuesioner:</h1>
+            <p id="player-result-summary" style="display: none;"></p> <!-- Hide for 2 players -->
+
+            <!-- New container for 2-player results -->
+            <div id="two-player-results-container">
+                <!-- Player 1 Result Box -->
+                <div id="p1-two-player-summary" class="player-summary-box p1-border">
+                    <h3 id="p1-two-player-name"></h3>
+                    <p class="dominant-style-text" id="p1-two-player-dominant"></p>
+                    <p class="style-counts" id="p1-two-player-counts"></p>
+                    <button class="reco-btn-player" id="two-player-reco-btn-p1">Lihat Rekomendasi P1</button>
+                </div>
+                <!-- Player 2 Result Box -->
+                <div id="p2-two-player-summary" class="player-summary-box p2-border">
+                    <h3 id="p2-two-player-name"></h3>
+                    <p class="dominant-style-text" id="p2-two-player-dominant"></p>
+                    <p class="style-counts" id="p2-two-player-counts"></p>
+                    <button class="reco-btn-player" id="two-player-reco-btn-p2">Lihat Rekomendasi P2</button>
+                </div>
+            </div>
+
+            <p>Data dikirim...</p>
+            <div id="loading-msg">Tunggu...</div>
+            <div class="result-actions">
+                <button id="view-recommendation-btn" onclick="displayRecommendation()" style="display: none;">Lihat
+                    Rekomendasi</button>
+                <button id="self-learn-ai-btn"
+                    onclick="window.open('https://wampiaigayabelajar.netlify.app/', '_blank')">Mencoba Belajar Sendiri
+                    (AI)</button>
+                <button style="background: linear-gradient(45deg, #e74c3c, #c0392b); color: white; border: none; font-weight: bold;" onclick="resetGameAndShowLogin()">Main Lagi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL WEB APP ANDA DARI DEPLOYMENT APPS SCRIPT TERAKHIR:
+        var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrqM3MUe9haUhj1e0t-pcuz7AeJSJZnZADHySiH4Yp33NgPCD6t1fz7kgxXoNxpv2B/exec";
+
+        var TOTAL_STEPS = 15;
+        var playerCount = 2;
+        var isSetupComplete = false;
+        var selectedPhase = '';
+
+                var questionsAtas = [
+            {
+                q: "Ketika saya merakit mainan atau sesuatu, saya lebih suka...",
+                a: [
+                    { text: "Mengikuti gambar atau petunjuk tertulis.", type: 'V' },
+                    { text: "Mendengarkan instruksi dari orang lain.", type: 'A' },
+                    { text: "Langsung mencoba merakitnya sendiri.", type: 'K' }
+                ]
+            },
+            {
+                q: "Saat belajar pelajaran baru di kelas, saya paling ingat jika...",
+                a: [
+                    { text: "Melihatnya dari buku cerita bergambar atau video.", type: 'V' },
+                    { text: "Mendengarkan penjelasan dari guru atau teman.", type: 'A' },
+                    { text: "Mencoba mempraktikkannya secara langsung.", type: 'K' }
+                ]
+            },
+            {
+                q: "Apa yang paling mungkin mengganggu saya saat sedang belajar?",
+                a: [
+                    { text: "Melihat pemandangan di luar jendela atau orang lewat.", type: 'V' },
+                    { text: "Mendengar suara berisik atau teman mengobrol.", type: 'A' },
+                    { text: "Harus duduk diam terlalu lama tanpa bergerak.", type: 'K' }
+                ]
+            },
+            {
+                q: "Ketika saya punya teman baru, saya paling mudah mengingat...",
+                a: [
+                    { text: "Wajah mereka dan baju yang mereka pakai.", type: 'V' },
+                    { text: "Nama mereka atau suara mereka.", type: 'A' },
+                    { text: "Permainan yang kami lakukan bersama.", type: 'K' }
+                ]
+            },
+            {
+                q: "Saya lebih suka membaca...",
+                a: [
+                    { text: "Buku dengan banyak gambar dan warna.", type: 'V' },
+                    { text: "Mendengarkan orang lain membacakan cerita untuk saya.", type: 'A' },
+                    { text: "Buku cerita petualangan yang seru.", type: 'K' }
+                ]
+            },
+            {
+                q: "Saat menunjukkan jalan ke suatu tempat, saya biasanya...",
+                a: [
+                    { text: "Menggambar peta di kertas.", type: 'V' },
+                    { text: "Memberitahu dengan kata-kata (belok kanan, kiri).", type: 'A' },
+                    { text: "Berjalan bersama teman untuk menunjukkan langsung.", type: 'K' }
+                ]
+            },
+            {
+                q: "Di waktu istirahat atau hari libur, saya lebih suka...",
+                a: [
+                    { text: "Menonton film kartun atau menggambar.", type: 'V' },
+                    { text: "Mendengarkan lagu atau bercerita.", type: 'A' },
+                    { text: "Bermain bola, lari-larian, atau bersepeda.", type: 'K' }
+                ]
+            },
+            {
+                q: "Jika saya harus menghafal pelajaran, saya akan...",
+                a: [
+                    { text: "Membacanya berulang kali atau membuat catatan warna-warni.", type: 'V' },
+                    { text: "Menghafalnya dengan suara keras atau seperti bernyanyi.", type: 'A' },
+                    { text: "Menghafal sambil berjalan bolak-balik.", type: 'K' }
+                ]
+            },
+            {
+                q: "Saat mencoba mengeja kata yang sulit, saya...",
+                a: [
+                    { text: "Membayangkan huruf-hurufnya di kepala saya.", type: 'V' },
+                    { text: "Menyebutkan hurufnya keras-keras satu per satu.", type: 'A' },
+                    { text: "Menulisnya di kertas dulu agar tahu benar atau salah.", type: 'K' }
+                ]
+            },
+            {
+                q: "Ketika mengingat kejadian lucu atau seru, saya paling ingat...",
+                a: [
+                    { text: "Seperti apa tempat kejadiannya dan apa yang saya lihat.", type: 'V' },
+                    { text: "Apa yang dikatakan teman-teman saat itu.", type: 'A' },
+                    { text: "Apa yang saya lakukan dan bagaimana perasaan saya.", type: 'K' }
+                ]
+            },
+            {
+                q: "Saya lebih suka jika bapak/ibu guru...",
+                a: [
+                    { text: "Menggunakan papan tulis, poster, atau proyektor.", type: 'V' },
+                    { text: "Bercerita dengan seru dan mengajak tanya jawab.", type: 'A' },
+                    { text: "Mengajak bermain tebak-tebakan atau praktek langsung.", type: 'K' }
+                ]
+            },
+            {
+                q: "Ketika saya merasa bosan di kelas, saya biasanya...",
+                a: [
+                    { text: "Mencoret-coret atau menggambar di buku.", type: 'V' },
+                    { text: "Mengobrol dengan teman sebelah atau bersenandung pelan.", type: 'A' },
+                    { text: "Menggoyangkan kaki, bermain pensil, atau ingin jalan-jalan.", type: 'K' }
+                ]
+            },
+            {
+                q: "Saya belajar berhitung atau matematika paling baik dengan...",
+                a: [
+                    { text: "Melihat guru menuliskan cara berhitung di papan tulis.", type: 'V' },
+                    { text: "Mendengarkan guru menjelaskan langkah-langkahnya.", type: 'A' },
+                    { text: "Menggunakan jari, lidi, atau balok untuk menghitung langsung.", type: 'K' }
+                ]
+            },
+            {
+                q: "Saya ingat kalau ada PR (Pekerjaan Rumah) dengan cara...",
+                a: [
+                    { text: "Melihat catatan yang saya tulis di buku tulis.", type: 'V' },
+                    { text: "Mengingat ucapan guru sebelum pulang sekolah.", type: 'A' },
+                    { text: "Menaruh buku PR di tempat yang pasti akan saya pegang.", type: 'K' }
+                ]
+            },
+            {
+                q: "Ketika saya sedang sangat gembira atau sedih, saya lebih suka...",
+                a: [
+                    { text: "Menulisnya di buku harian atau menggambar.", type: 'V' },
+                    { text: "Bercerita kepada orang tua atau sahabat.", type: 'A' },
+                    { text: "Berlari, melompat kegirangan, atau bermain di luar.", type: 'K' }
+                ]
+            }
+        ];
+        var questionsBawah = [
+            { q: "Saat belajar, saya suka...", imgMode: true, a: [
+                { text: "Melihat gambar", img: "https://images2.imgbox.com/3f/18/1Z8QiIdT_o.png", type: 'V' },
+                { text: "Mendengar penjelasan", img: "https://images2.imgbox.com/d6/2f/3OTSBPs3_o.png", type: 'A' },
+                { text: "Mencoba langsung", img: "https://images2.imgbox.com/ab/32/4rk9RRgK_o.png", type: 'K' }
+            ] },
+            { q: "Saya paling mudah mengingat...", imgMode: true, a: [
+                { text: "Yang saya lihat", img: "https://images2.imgbox.com/58/04/z7rRyRlS_o.png", type: 'V' },
+                { text: "Yang saya dengar", img: "https://images2.imgbox.com/75/40/O1OQ3pfS_o.png", type: 'A' },
+                { text: "Yang saya lakukan", img: "https://images2.imgbox.com/3a/36/PGLiATzt_o.png", type: 'K' }
+            ] },
+            { q: "Saat bermain, saya lebih suka...", imgMode: true, a: [
+                { text: "Menggambar", img: "https://images2.imgbox.com/3e/93/NxjooaUJ_o.png", type: 'V' },
+                { text: "Bernyanyi", img: "https://images2.imgbox.com/69/21/TI179hI0_o.png", type: 'A' },
+                { text: "Berlari", img: "https://images2.imgbox.com/17/5a/uwyZa8SJ_o.png", type: 'K' }
+            ] },
+            { q: "Jika diberi petunjuk, saya suka...", imgMode: true, a: [
+                { text: "Melihat contoh", img: "https://images2.imgbox.com/7f/c7/bATpJAWm_o.png", type: 'V' },
+                { text: "Mendengar penjelasan", img: "https://images2.imgbox.com/96/c3/osc2p6jI_o.png", type: 'A' },
+                { text: "Dicontohkan langsung", img: "https://images2.imgbox.com/fa/05/4JaD2YXY_o.png", type: 'K' }
+            ] },
+            { q: "Saat membaca cerita, saya suka...", imgMode: true, a: [
+                { text: "Melihat gambarnya", img: "https://images2.imgbox.com/a9/f3/TDQRpjHB_o.png", type: 'V' },
+                { text: "Mendengar cerita dibacakan", img: "https://images2.imgbox.com/a6/d6/709gnUx1_o.png", type: 'A' },
+                { text: "Memainkan ceritanya", img: "https://images2.imgbox.com/07/15/F1V18b25_o.png", type: 'K' }
+            ] },
+            { q: "Saat belajar kata baru, saya suka...", imgMode: true, a: [
+                { text: "Melihat tulisannya", img: "https://images2.imgbox.com/2d/d3/7DdITgtH_o.png", type: 'V' },
+                { text: "Mengucapkannya", img: "https://images2.imgbox.com/75/3d/Qb37qFv4_o.png", type: 'A' },
+                { text: "Menulis atau mempraktikkannya", img: "https://images2.imgbox.com/be/ce/tywknOn4_o.png", type: 'K' }
+            ] },
+            { q: "Saya lebih mudah mengenali teman dari...", imgMode: true, a: [
+                { text: "Wajahnya", img: "https://images2.imgbox.com/8e/8a/aW1dohww_o.png", type: 'V' },
+                { text: "Suaranya", img: "https://images2.imgbox.com/da/44/h9lndK9a_o.png", type: 'A' },
+                { text: "Cara bergeraknya", img: "https://images2.imgbox.com/18/0a/33VoqV9g_o.png", type: 'K' }
+            ] },
+            { q: "Saat guru mengajar, saya paling senang jika...", imgMode: true, a: [
+                { text: "Ada gambar", img: "https://images2.imgbox.com/86/18/rEtC9iCM_o.png", type: 'V' },
+                { text: "Banyak cerita", img: "https://images2.imgbox.com/c7/f5/PZHijUFt_o.png", type: 'A' },
+                { text: "Ada praktik", img: "https://images2.imgbox.com/5b/65/ukYN48yz_o.png", type: 'K' }
+            ] },
+            { q: "Ketika bosan, saya biasanya...", imgMode: true, a: [
+                { text: "Melihat-lihat sesuatu", img: "https://images2.imgbox.com/b1/2f/LkR8dsTy_o.png", type: 'V' },
+                { text: "Mengobrol", img: "https://images2.imgbox.com/74/87/ui6Tb0a7_o.png", type: 'A' },
+                { text: "Bergerak atau berjalan", img: "https://images2.imgbox.com/01/c6/h44uy2EB_o.png", type: 'K' }
+            ] },
+            { q: "Saat belajar berhitung, saya suka...", imgMode: true, a: [
+                { text: "Melihat contoh soal", img: "https://images2.imgbox.com/f6/3d/raOKkC4l_o.png", type: 'V' },
+                { text: "Mendengar cara mengerjakannya", img: "https://images2.imgbox.com/c0/c1/fKhqs4ug_o.png", type: 'A' },
+                { text: "Menggunakan benda nyata", img: "https://images2.imgbox.com/e6/69/ePxe1lTy_o.png", type: 'K' }
+            ] },
+            { q: "Saya lebih suka...", imgMode: true, a: [
+                { text: "Buku bergambar", img: "https://images2.imgbox.com/57/b1/7IpNYXLC_o.png", type: 'V' },
+                { text: "Lagu anak-anak", img: "https://images2.imgbox.com/a4/db/WEGRUrDq_o.png", type: 'A' },
+                { text: "Permainan gerak", img: "https://images2.imgbox.com/1a/26/L2O0QwfP_o.png", type: 'K' }
+            ] },
+            { q: "Saat belajar hal baru, saya...", imgMode: true, a: [
+                { text: "Melihat dulu", img: "https://images2.imgbox.com/ae/a5/TkJ19yhR_o.png", type: 'V' },
+                { text: "Mendengar dulu", img: "https://images2.imgbox.com/e6/f7/ApGsctNA_o.png", type: 'A' },
+                { text: "Mencoba dulu", img: "https://images2.imgbox.com/71/57/CBGJmBSW_o.png", type: 'K' }
+            ] },
+            { q: "Saya paling mudah mengingat pelajaran jika...", imgMode: true, a: [
+                { text: "Ada gambar atau warna", img: "https://images2.imgbox.com/18/db/Prq90iXS_o.png", type: 'V' },
+                { text: "Dijelaskan berulang kali", img: "https://images2.imgbox.com/10/ca/6MI3LbST_o.png", type: 'A' },
+                { text: "Dipraktikkan langsung", img: "https://images2.imgbox.com/c8/8f/OsMpds6B_o.png", type: 'K' }
+            ] },
+            { q: "Saat mengerjakan tugas, saya suka...", imgMode: true, a: [
+                { text: "Melihat contoh hasilnya", img: "https://images2.imgbox.com/a9/01/i4U3Vfzx_o.png", type: 'V' },
+                { text: "Mendengar petunjuk guru", img: "https://images2.imgbox.com/25/a8/cH2ZqsNc_o.png", type: 'A' },
+                { text: "Langsung mengerjakan", img: "https://images2.imgbox.com/26/5b/BOeLNepD_o.png", type: 'K' }
+            ] },
+            { q: "Saat mendapat mainan baru, saya...", imgMode: true, a: [
+                { text: "Melihat bentuknya", img: "https://images2.imgbox.com/4d/ce/nLdvKpbH_o.png", type: 'V' },
+                { text: "Mendengar penjelasannya", img: "https://images2.imgbox.com/30/7d/9O9gQVNw_o.png", type: 'A' },
+                { text: "Langsung mencobanya", img: "https://images2.imgbox.com/18/11/qVpEZJUL_o.png", type: 'K' }
+            ] }
+        ];
+        var questions = [];
+
+
+        var players = {
+            p1: { id: 'p1', name: '', score: 0, qIndex: 0, qList: [], isFinished: false, vCount: 0, aCount: 0, kCount: 0 },
+            p2: { id: 'p2', name: '', score: 0, qIndex: 0, qList: [], isFinished: false, vCount: 0, aCount: 0, kCount: 0 }
+        };
+        var startTime;
+        var gameActive = false;
+
+        function getActivePlayersId() {
+            const activeIds = ['p1'];
+            if (playerCount === 2) {
+                activeIds.push('p2');
+            }
+            return activeIds;
+        }
+
+        function checkAllFinished() {
+            const activePlayers = getActivePlayersId();
+            const allFinished = activePlayers.every(pid => players[pid].isFinished);
+
+            if (allFinished) {
+                const winnerId = determineWinner(activePlayers);
+                endGame(winnerId);
+            }
+        }
+
+        function determineWinner(activeIds) {
+            let maxScore = -1;
+            let winners = [];
+
+            for (const pid of activeIds) {
+                if (players[pid].score > maxScore) {
+                    maxScore = players[pid].score;
+                    winners = [pid];
+                } else if (players[pid].score === maxScore) {
+                    winners.push(pid);
+                }
+            }
+
+            return winners[0] || activeIds[0];
+        }
+
+        function showPlayerSetup(mode) {
+            playerCount = mode;
+            document.getElementById('main-dashboard').style.display = 'none';
+            document.getElementById('phase-selection-screen').style.display = 'flex';
+        }
+
+        function returnToDashboardFromPhase() {
+            document.getElementById('phase-selection-screen').style.display = 'none';
+            document.getElementById('main-dashboard').style.display = 'flex';
+        }
+
+        function selectPhase(phase) {
+            selectedPhase = phase;
+            questions = selectedPhase === 'bawah' ? questionsBawah : questionsAtas;
+            // Preload semua gambar kelas bawah agar langsung muncul
+            if (selectedPhase === 'bawah') {
+                preloadImages(questionsBawah);
+            }
+            document.getElementById('phase-selection-screen').style.display = 'none';
+            proceedToLoginScreen();
+        }
+
+        function preloadImages(questionList) {
+            questionList.forEach(q => {
+                if (q.imgMode && q.a) {
+                    q.a.forEach(choice => {
+                        if (choice.img) {
+                            const img = new Image();
+                            img.src = choice.img;
+                        }
+                    });
+                }
+            });
+        }
+
+        function proceedToLoginScreen() {
+            document.querySelectorAll('.player-input-box').forEach(box => box.classList.add('hidden'));
+            document.querySelector('.p1-box').classList.remove('hidden');
+            
+            let phaseText = selectedPhase === 'bawah' ? "Kelas Bawah" : "Kelas Atas";
+            
+            if (playerCount === 2) {
+                document.querySelector('.p2-box').classList.remove('hidden');
+                document.getElementById('setup-title').innerText = "Registrasi 2 Pelari (" + phaseText + ")";
+                document.getElementById('player-inputs').style.gridTemplateColumns = '1fr 1fr';
+            } else {
+                document.getElementById('setup-title').innerText = "Registrasi 1 Pelari (" + phaseText + ")";
+                document.getElementById('player-inputs').style.gridTemplateColumns = '1fr';
+                document.getElementById('p2-name').value = '';
+            }
+
+            document.getElementById('login-screen').style.display = 'flex';
+            checkInputs();
+        }
+
+        function returnToDashboard() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('phase-selection-screen').style.display = 'flex';
+        }
+
+        function checkInputs() {
+            const school = document.getElementById('shared-school').value;
+            const kecamatan = document.getElementById('shared-kecamatan').value;
+            const kabupaten = document.getElementById('shared-kabupaten').value;
+            const p1 = document.getElementById('p1-name').value;
+            const p2 = document.getElementById('p2-name').value;
+
+            const btn = document.getElementById('start-btn');
+            if (school && kecamatan && kabupaten && p1 && (playerCount === 1 || p2)) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+
+        function shuffleArray(array) {
+            let newArr = JSON.parse(JSON.stringify(array));
+            for (let i = newArr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+            }
+            return newArr;
+        }
+
+        function startGame() {
+            const school = document.getElementById('shared-school').value;
+            const kecamatan = document.getElementById('shared-kecamatan').value;
+            const kabupaten = document.getElementById('shared-kabupaten').value;
+            if (!school || !kecamatan || !kabupaten) return;
+
+            players.p1.name = document.getElementById('p1-name').value;
+            players.p2.name = document.getElementById('p2-name').value; // This might be empty for 1 player mode
+
+            const activePlayers = getActivePlayersId();
+
+            // Set playerCount based on activePlayers length
+            playerCount = activePlayers.length;
+
+            activePlayers.forEach(pid => {
+                document.getElementById(`disp-${pid}-name`).innerText = players[pid].name;
+                document.getElementById(`score-${pid}`).innerText = "0";
+                document.getElementById(`q-count-${pid}`).innerText = "1/" + TOTAL_STEPS;
+                document.getElementById(`bike-${pid}`).style.left = '1%';
+                players[pid].score = 0;
+                players[pid].qIndex = 0;
+                players[pid].isFrozen = false;
+                players[pid].isFinished = false;
+                players[pid].vCount = 0; // Reset V count
+                players[pid].aCount = 0; // Reset A count
+                players[pid].kCount = 0; // Reset K count
+                document.getElementById(`zone-${pid}`).style.pointerEvents = 'auto';
+                document.getElementById(`q-box-${pid}`).innerText = "Memuat...";
+            });
+
+            // Sembunyikan atau tampilkan elemen pemain 2 sesuai jumlah pemain
+            const p2Elements = document.querySelectorAll('.p2-track, #zone-p2');
+            p2Elements.forEach(el => {
+                el.classList.toggle('hidden', playerCount === 1);
+            });
+
+            const quizAreaContainer = document.getElementById('quiz-area-container');
+            quizAreaContainer.classList.toggle('two-player', playerCount === 2);
+            quizAreaContainer.classList.toggle('one-player', playerCount === 1);
+
+            document.querySelector('.race-track-area').classList.toggle('two-player', playerCount === 2);
+
+            let currentQuestions = questions;
+
+            // Gandakan pertanyaan jika kurang dari 20 untuk memastikan permainan berjalan
+            while (currentQuestions.length < TOTAL_STEPS) currentQuestions = currentQuestions.concat(currentQuestions);
+            // Potong jika lebih dari 20 (agar konsisten)
+            if (currentQuestions.length > TOTAL_STEPS) currentQuestions = currentQuestions.slice(0, TOTAL_STEPS);
+
+            activePlayers.forEach(pid => {
+                players[pid].qList = shuffleArray(currentQuestions);
+                renderQuestion(pid);
+            });
+
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'flex';
+            startTime = new Date();
+            gameActive = true;
+        }
+
+        function loadResultsFromSession() {
+            const savedResults = sessionStorage.getItem('kuesionerResults');
+            if (!savedResults) return;
+
+            const sessionResults = JSON.parse(savedResults);
+            playerCount = sessionResults.playerCount;
+
+            document.getElementById('shared-school').value = sessionResults.sharedSchool || '';
+            document.getElementById('shared-kecamatan').value = sessionResults.sharedKecamatan || '';
+            document.getElementById('shared-kabupaten').value = sessionResults.sharedKabupaten || '';
+
+            // Restore player data
+            for (const pid in sessionResults.playersData) {
+                players[pid] = { ...players[pid], ...sessionResults.playersData[pid] };
+                // Also populate registration inputs, so they are not empty if user returns
+                const nameInput = document.getElementById(`${pid}-name`);
+                if (nameInput) nameInput.value = players[pid].name;
+            }
+            checkInputs(); // Update start button state
+
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'flex';
+            document.getElementById('result-content').style.display = 'block';
+
+            document.getElementById('winner-text').innerHTML = sessionResults.winnerText;
+
+            if (playerCount === 1) {
+                const p1 = players[getActivePlayersId()[0]];
+                document.getElementById('player-result-summary').innerHTML = `(Visual: ${p1.vCount}, Auditori: ${p1.aCount}, Kinestetik: ${p1.kCount})`;
+                document.getElementById('player-result-summary').style.display = 'block';
+                document.getElementById('view-recommendation-btn').style.display = 'inline-block';
+                document.getElementById('view-recommendation-btn').onclick = () => {
+                    window.location.href = `rekomendasi.html?style=${p1.dominantStyle}&name=${encodeURIComponent(p1.name)}&v=${p1.vCount}&a=${p1.aCount}&k=${p1.kCount}`;
+                };
+                document.getElementById('self-learn-ai-btn').style.display = 'inline-block';
+                document.getElementById('two-player-results-container').style.display = 'none';
+            } else if (playerCount === 2) {
+                document.getElementById('two-player-results-container').style.display = 'flex';
+                document.getElementById('player-result-summary').style.display = 'none';
+                document.getElementById('view-recommendation-btn').style.display = 'none';
+
+                const p1 = players.p1;
+                const p2 = players.p2;
+
+                document.getElementById('p1-two-player-name').innerText = p1.name;
+                document.getElementById('p1-two-player-dominant').innerText = `Gaya Belajar: ${p1.dominantStyle}`;
+                document.getElementById('p1-two-player-counts').innerText = `(V: ${p1.vCount}, A: ${p1.aCount}, K: ${p1.kCount})`;
+                document.getElementById('two-player-reco-btn-p1').onclick = () => {
+                    window.location.href = `rekomendasi.html?style=${p1.dominantStyle}&name=${encodeURIComponent(p1.name)}&v=${p1.vCount}&a=${p1.aCount}&k=${p1.kCount}`;
+                };
+
+                document.getElementById('p2-two-player-name').innerText = p2.name;
+                document.getElementById('p2-two-player-dominant').innerText = `Gaya Belajar: ${p2.dominantStyle}`;
+                document.getElementById('p2-two-player-counts').innerText = `(V: ${p2.vCount}, A: ${p2.aCount}, K: ${p2.kCount})`;
+                document.getElementById('two-player-reco-btn-p2').onclick = () => {
+                    window.location.href = `rekomendasi.html?style=${p2.dominantStyle}&name=${encodeURIComponent(p2.name)}&v=${p2.vCount}&a=${p2.aCount}&k=${p2.kCount}`;
+                };
+                document.getElementById('self-learn-ai-btn').style.display = 'inline-block';
+            }
+        }
+
+        function renderQuestion(pid) {
+            const p = players[pid];
+            const qBox = document.getElementById(`q-box-${pid}`);
+            const optsContainer = document.getElementById(`opts-${pid}`);
+
+            if (p.isFinished) {
+                qBox.innerText = `KUESIONER SELESAI! Menunggu hasil akhir...`;
+                optsContainer.innerHTML = '';
+                return;
+            }
+
+            // Atur hitungan soal yang sedang dicoba
+            const displayQIndex = p.qIndex < TOTAL_STEPS ? p.qIndex + 1 : TOTAL_STEPS;
+            document.getElementById(`q-count-${pid}`).innerText = `${displayQIndex}/${TOTAL_STEPS}`;
+
+
+            if (p.qIndex >= p.qList.length) p.qIndex = 0;
+            const qData = p.qList[p.qIndex];
+
+            qBox.innerHTML = qData.q;
+
+            optsContainer.innerHTML = '';
+
+            let choices = shuffleArray(qData.a);
+
+            if (qData.imgMode) {
+                // Mode gambar: tampilkan dalam grid 3 kolom
+                optsContainer.classList.add('option-img-grid');
+                choices.forEach(c => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-img-btn';
+                    btn.setAttribute('data-type', c.type);
+                    btn.innerHTML = `<img src="${c.img}" alt="${c.text}" loading="eager" decoding="async"><span>${c.text}</span>`;
+                    btn.onclick = (event) => handleAnswer(pid, c.type, btn);
+                    optsContainer.appendChild(btn);
+                });
+                // Tandai zona dan quiz-area untuk CSS adjustment di 2-player
+                const quizArea = document.getElementById('quiz-area-container');
+                if (quizArea) quizArea.classList.add('has-img-mode');
+                const raceTrack = document.querySelector('.race-track-area');
+                if (raceTrack) raceTrack.classList.add('shrink-for-img');
+            } else {
+                // Mode teks biasa
+                optsContainer.classList.remove('option-img-grid');
+                choices.forEach(c => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerText = c.text;
+                    btn.setAttribute('data-type', c.type);
+                    btn.onclick = (event) => handleAnswer(pid, c.type, event.target);
+                    optsContainer.appendChild(btn);
+                });
+                // Hapus kelas img-mode jika soal kembali ke teks
+                const quizArea = document.getElementById('quiz-area-container');
+                if (quizArea) quizArea.classList.remove('has-img-mode');
+                const raceTrack = document.querySelector('.race-track-area');
+                if (raceTrack) raceTrack.classList.remove('shrink-for-img');
+            }
+        }
+
+        function disableAllOptions(pid, disable) {
+            const container = document.getElementById(`opts-${pid}`);
+            container.querySelectorAll('.option-btn, .option-img-btn').forEach(btn => {
+                btn.classList.toggle('disabled', disable);
+            });
+        }
+
+        function moveToNextQuestion(pid, delay) {
+            const p = players[pid];
+
+            // Periksa apakah ini soal ke-20
+            if (p.qIndex + 1 >= TOTAL_STEPS) {
+                p.isFinished = true;
+                document.getElementById(`zone-${pid}`).style.pointerEvents = 'none';
+                document.getElementById(`q-box-${pid}`).innerText = `KUESIONER SELESAI! Menunggu hasil akhir...`;
+                checkAllFinished();
+                return;
+            }
+
+            setTimeout(() => {
+                p.qIndex++;
+                renderQuestion(pid);
+                p.isFrozen = false;
+            }, delay);
+        }
+
+
+        function handleAnswer(pid, chosenType, btnElement) {
+            const p = players[pid];
+            if (!gameActive || p.isFinished || p.isFrozen) return;
+
+            // Tandai pemain sedang dalam proses (frozen)
+            p.isFrozen = true;
+
+            // Nonaktifkan semua opsi saat proses validasi
+            disableAllOptions(pid, true);
+            btnElement.classList.add('selected-answer'); // Tambahkan kelas untuk menandai jawaban yang dipilih
+
+            // Rekam tipe gaya belajar
+            if (chosenType === 'V') p.vCount++;
+            else if (chosenType === 'A') p.aCount++;
+            else if (chosenType === 'K') p.kCount++;
+
+            // Update progress (score) untuk menggerakkan sepeda
+            p.score++;
+            document.getElementById(`score-${pid}`).innerText = p.score; // Skor sekarang menunjukkan jumlah soal dijawab
+            updateBike(pid);
+
+            // Langsung pindah ke soal berikutnya (delay lebih singkat)
+            moveToNextQuestion(pid, 800);
+
+        }
+
+        function updateBike(pid) {
+            // Bergerak dari 4% ke 95% (total 91% perjalanan)
+            const progress = (players[pid].score / TOTAL_STEPS) * 91;
+            document.getElementById(`bike-${pid}`).style.left = (4 + progress) + '%';
+        }
+
+        function calculateDominant(v, a, k) {
+            let max = Math.max(v, a, k);
+            if (max === v) return 'Visual';
+            if (max === a) return 'Auditori';
+            return 'Kinestetik';
+        }
+
+        function endGame(wid) {
+            gameActive = false;
+            const duration = ((new Date() - startTime) / 1000).toFixed(1);
+
+            // Karena ini kuesioner, "pemenang" ditentukan oleh gaya belajar dominan
+            let winnerText = "Hasil Kuesioner:";
+            let dominantStyle = '';
+
+            const activePlayers = getActivePlayersId();
+
+            // Sembunyikan elemen 1-player secara default
+            document.getElementById('player-result-summary').style.display = 'none';
+            document.getElementById('view-recommendation-btn').style.display = 'none';
+            document.getElementById('two-player-results-container').style.display = 'none';
+
+            if (activePlayers.length === 1) {
+                const p1 = players[activePlayers[0]];
+                dominantStyle = calculateDominant(p1.vCount, p1.aCount, p1.kCount);
+
+                let vPct = Math.round((p1.vCount / TOTAL_STEPS) * 100);
+                let aPct = Math.round((p1.aCount / TOTAL_STEPS) * 100);
+                let kPct = Math.round((p1.kCount / TOTAL_STEPS) * 100);
+
+                winnerText = `${p1.name} memiliki Gaya Belajar: ${dominantStyle}`;
+                document.getElementById('player-result-summary').innerHTML = `(Visual: ${vPct}%, Auditori: ${aPct}%, Kinestetik: ${kPct}%)`;
+                document.getElementById('player-result-summary').style.display = 'block';
+
+                // Tampilkan tombol rekomendasi dan AI untuk 1 pemain
+                const recoBtn = document.getElementById('view-recommendation-btn');
+                recoBtn.style.display = 'inline-block';
+                recoBtn.onclick = () => {
+                    window.location.href = `rekomendasi.html?style=${dominantStyle}&name=${encodeURIComponent(p1.name)}&v=${p1.vCount}&a=${p1.aCount}&k=${p1.kCount}`;
+                };
+
+                document.getElementById('self-learn-ai-btn').style.display = 'inline-block';
+
+            } else if (activePlayers.length === 2) {
+                const p1 = players[activePlayers[0]];
+                const p2 = players[activePlayers[1]];
+
+                document.getElementById('two-player-results-container').style.display = 'flex';
+                document.getElementById('player-result-summary').style.display = 'none';
+                document.getElementById('view-recommendation-btn').style.display = 'none';
+
+                // --- Player 1 Results ---
+                document.getElementById('p1-two-player-name').innerText = p1.name;
+                const p1Dominant = calculateDominant(p1.vCount, p1.aCount, p1.kCount);
+                
+                let p1vPct = Math.round((p1.vCount / TOTAL_STEPS) * 100);
+                let p1aPct = Math.round((p1.aCount / TOTAL_STEPS) * 100);
+                let p1kPct = Math.round((p1.kCount / TOTAL_STEPS) * 100);
+
+                document.getElementById('p1-two-player-dominant').innerText = `Gaya Belajar: ${p1Dominant}`;
+                document.getElementById('p1-two-player-counts').innerText = `(V: ${p1vPct}%, A: ${p1aPct}%, K: ${p1kPct}%)`;
+                document.getElementById('two-player-reco-btn-p1').onclick = () => {
+                    window.location.href = `rekomendasi.html?style=${p1Dominant}&name=${encodeURIComponent(p1.name)}&v=${p1.vCount}&a=${p1.aCount}&k=${p1.kCount}`;
+                };
+
+                // --- Player 2 Results ---
+                document.getElementById('p2-two-player-name').innerText = p2.name;
+                const p2Dominant = calculateDominant(p2.vCount, p2.aCount, p2.kCount);
+                
+                let p2vPct = Math.round((p2.vCount / TOTAL_STEPS) * 100);
+                let p2aPct = Math.round((p2.aCount / TOTAL_STEPS) * 100);
+                let p2kPct = Math.round((p2.kCount / TOTAL_STEPS) * 100);
+
+                document.getElementById('p2-two-player-dominant').innerText = `Gaya Belajar: ${p2Dominant}`;
+                document.getElementById('p2-two-player-counts').innerText = `(V: ${p2vPct}%, A: ${p2aPct}%, K: ${p2kPct}%)`;
+                document.getElementById('two-player-reco-btn-p2').onclick = () => {
+                    window.location.href = `rekomendasi.html?style=${p2Dominant}&name=${encodeURIComponent(p2.name)}&v=${p2.vCount}&a=${p2.aCount}&k=${p2.kCount}`;
+                };
+
+                // Pastikan tombol AI dan Main Lagi terlihat
+                document.getElementById('self-learn-ai-btn').style.display = 'inline-block';
+            }
+
+            document.getElementById('winner-text').innerHTML = winnerText;
+
+            // Simpan dulu ke session storage
+            const playersToSend = getActivePlayersId();
+            playersToSend.forEach(pid => {
+                const playerResult = players[pid];
+                let dominant = calculateDominant(playerResult.vCount, playerResult.aCount, playerResult.kCount);
+                sendData(
+                    players[pid],
+                    'Selesai Kuesioner',
+                    playerResult.vCount,
+                    playerResult.aCount,
+                    playerResult.kCount,
+                    duration,
+                    `Kuesioner Gaya Belajar ${playerCount} Pemain`,
+                    dominant
+                );
+            });
+
+            const sessionResults = {
+                playerCount: activePlayers.length,
+                winnerText: winnerText,
+                playersData: {},
+                sharedSchool: document.getElementById('shared-school').value,
+                sharedKecamatan: document.getElementById('shared-kecamatan').value,
+                sharedKabupaten: document.getElementById('shared-kabupaten').value
+            };
+            activePlayers.forEach(pid => {
+                const playerResult = players[pid];
+                let dominant = calculateDominant(playerResult.vCount, playerResult.aCount, playerResult.kCount);
+                sessionResults.playersData[pid] = {
+                    name: playerResult.name,
+                    vCount: playerResult.vCount,
+                    aCount: playerResult.aCount,
+                    kCount: playerResult.kCount,
+                    dominantStyle: dominant
+                };
+            });
+            sessionStorage.setItem('kuesionerResults', JSON.stringify(sessionResults));
+
+            // Tampilkan loading analysis sebelum result
+            showLoadingThenResult();
+        }
+
+        function showLoadingThenResult() {
+            const loadingScreen = document.getElementById('loading-analysis-screen');
+            const barFill = document.getElementById('loading-bar-fill');
+            const percentText = document.getElementById('loading-percent-text');
+            const phaseText = document.getElementById('loading-phase-text');
+
+            const phases = [
+                { pct: 0,   msg: 'Membaca pola jawaban kamu...' },
+                { pct: 20,  msg: 'Mengidentifikasi kecenderungan belajar...' },
+                { pct: 40,  msg: 'Menghitung skor Visual, Auditori & Kinestetik...' },
+                { pct: 60,  msg: 'Mencocokkan profil gaya belajar...' },
+                { pct: 80,  msg: 'Menyiapkan hasil rekomendasi...' },
+                { pct: 100, msg: 'Analisis selesai! ✅' }
+            ];
+
+            loadingScreen.style.display = 'flex';
+            barFill.style.width = '0%';
+            percentText.innerText = '0%';
+            phaseText.innerText = phases[0].msg;
+
+            let current = 0;
+            let pct = 0;
+
+            // Animasi naik 1% per interval
+            const totalDuration = 3000; // 3 detik total
+            const interval = totalDuration / 100;
+
+            const timer = setInterval(() => {
+                pct++;
+                barFill.style.width = pct + '%';
+                percentText.innerText = pct + '%';
+
+                // Ganti teks fase sesuai persentase
+                for (let i = phases.length - 1; i >= 0; i--) {
+                    if (pct >= phases[i].pct) {
+                        if (phaseText.innerText !== phases[i].msg) {
+                            phaseText.innerText = phases[i].msg;
+                        }
+                        break;
+                    }
+                }
+
+                if (pct >= 100) {
+                    clearInterval(timer);
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        document.getElementById('result-screen').style.display = 'flex';
+                        document.getElementById('result-content').style.display = 'block';
+                    }, 500);
+                }
+            }, interval);
+        }
+
+        function sendData(playerObj, status, vCount, aCount, kCount, waktu, jenis, gayaBelajarDominan) {
+            const formData = new FormData();
+            formData.append('timestamp', new Date().toISOString());
+            formData.append('nama', playerObj.name);
+            formData.append('sekolah', document.getElementById('shared-school').value);
+            formData.append('kecamatan', document.getElementById('shared-kecamatan').value);
+            formData.append('kabupaten', document.getElementById('shared-kabupaten').value);
+            formData.append('kota', document.getElementById('shared-kecamatan').value + ', ' + document.getElementById('shared-kabupaten').value);
+            formData.append('total_visual', vCount);
+            formData.append('total_auditori', aCount);
+            formData.append('total_kinestetik', kCount);
+            formData.append('status', status);
+            formData.append('waktu', waktu);
+            formData.append('jenis_kuis', jenis);
+            formData.append('gaya_belajar_dominan', gayaBelajarDominan);
+
+            fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
+                .catch(err => console.error("Error sending data", err));
+        }
+
+        function backToHome() {
+            window.location.href = 'rumahkelas6.html';
+        }
+
+        function resetGameAndShowLogin() {
+            sessionStorage.clear(); // Clear saved results
+            document.getElementById('main-dashboard').style.display = 'flex';
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'none';
+
+            // Clear inputs
+            document.getElementById('shared-school').value = '';
+            document.getElementById('shared-kecamatan').value = '';
+            document.getElementById('shared-kabupaten').value = '';
+            document.getElementById('p1-name').value = '';
+            document.getElementById('p2-name').value = '';
+            checkInputs();
+
+            // Reset players object
+            for (const pid in players) {
+                players[pid] = { id: pid, name: '', score: 0, qIndex: 0, qList: [], isFinished: false, vCount: 0, aCount: 0, kCount: 0 };
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadResultsFromSession(); // Try to load results first
+            if (document.getElementById('result-screen').style.display !== 'flex') {
+                // If no results loaded, show dashboard Mode Selection
+                document.getElementById('main-dashboard').style.display = 'flex';
+                document.getElementById('login-screen').style.display = 'none';
+            }
+        });
+
+
+    </script>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

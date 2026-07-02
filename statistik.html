@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Si Tegar - Statistik</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 230px; /* Tinggi yang sama untuk semua grafik, diperkecil */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+        .chart-title {
+            color: #10b981;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        #main-content {
+            display: none; /* Disembunyikan sebelum password dimasukkan */
+        }
+        #password-screen {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .password-box {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar navbar-expand-lg navbar-dark p-3 px-md-4 mb-3 shadow-sm">
+        <div class="container-fluid">
+            <a href="index.html" class="navbar-brand fw-bold">SI TEGAR</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i>Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="kuesioner.html"><i class="fas fa-tasks me-1"></i>Kuesioner</a></li>
+                    <li class="nav-item"><a class="nav-link" href="rekomendasi.html"><i class="fas fa-chart-bar me-1"></i>Rekomendasi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sumber.html"><i class="fas fa-book me-1"></i>Sumber</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://aplikasiaigaya.github.io/index.html"><i class="fas fa-robot me-1"></i>AI Gaya Belajar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="log.html"><i class="fas fa-comment-dots me-1"></i>Log & Umpan Balik</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="statistik.html"><i class="fas fa-chart-pie me-1"></i>Statistik</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Password Screen -->
+    <div id="password-screen" class="container">
+        <div class="password-box border border-primary">
+            <h3 class="mb-4 text-white"><i class="fas fa-lock me-2 text-warning"></i>Akses Admin</h3>
+            <p class="text-muted mb-4">Masukkan kata sandi untuk melihat statistik pengunjung.</p>
+            <input type="password" id="adminPassword" class="form-control mb-3 text-center" placeholder="Kata Sandi">
+            <button id="loginBtn" class="btn btn-primary w-100 fw-bold">Masuk</button>
+            <div id="loginError" class="text-danger mt-2" style="display:none; font-size: 0.9em;">Kata sandi salah!</div>
+        </div>
+    </div>
+
+    <!-- Main Content (Charts) -->
+    <main id="main-content" class="container" style="max-width: 1100px;">
+        <h3 class="text-center mb-4 fw-bold" style="color: #10b981; font-size: 1.6rem;">
+            <i class="fas fa-chart-line me-2"></i>Dashboard Statistik Pengunjung
+        </h3>
+        
+        <div id="loading" class="text-center mb-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Mengambil data dari server...</p>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <!-- Kecamatan -->
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h5 class="chart-title">Peserta Berdasarkan Kecamatan (Batang)</h5>
+                    <div class="chart-wrapper"><canvas id="barKecamatan"></canvas></div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h5 class="chart-title">Peserta Berdasarkan Kecamatan (Lingkaran)</h5>
+                    <div class="chart-wrapper"><canvas id="pieKecamatan"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Kabupaten -->
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h5 class="chart-title">Peserta Berdasarkan Kabupaten (Batang)</h5>
+                    <div class="chart-wrapper"><canvas id="barKabupaten"></canvas></div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h5 class="chart-title">Peserta Berdasarkan Kabupaten (Lingkaran)</h5>
+                    <div class="chart-wrapper"><canvas id="pieKabupaten"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Gaya Belajar -->
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h5 class="chart-title">Hasil Gaya Belajar (Batang)</h5>
+                    <div class="chart-wrapper"><canvas id="barGayaBelajar"></canvas></div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h5 class="chart-title">Hasil Gaya Belajar (Lingkaran)</h5>
+                    <div class="chart-wrapper"><canvas id="pieGayaBelajar"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Pengunjung Harian -->
+            <div class="col-lg-12">
+                <div class="chart-container">
+                    <h5 class="chart-title">Tren Jumlah Pengunjung (Berdasarkan Tanggal)</h5>
+                    <div class="chart-wrapper"><canvas id="barPengunjung"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-3 mt-4">
+        <p class="text-muted small mb-0">SI TEGAR versi 2.0 - 2025</p>
+        <p class="text-muted small mb-0">Created by FUDAK WINDUKO</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrqM3MUe9haUhj1e0t-pcuz7AeJSJZnZADHySiH4Yp33NgPCD6t1fz7kgxXoNxpv2B/exec";
+
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const pwd = document.getElementById('adminPassword').value;
+            if (pwd === "Nirmala0903") {
+                document.getElementById('password-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                loadData();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        });
+
+        // Agar bisa menekan Enter saat mengetik password
+        document.getElementById('adminPassword').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') document.getElementById('loginBtn').click();
+        });
+
+        async function loadData() {
+            try {
+                // Mengambil data menggunakan GET request.
+                const response = await fetch(SCRIPT_URL + "?action=getStats");
+                const result = await response.json();
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (result.status === "success" && result.data) {
+                    processAndDrawCharts(result.data);
+                } else {
+                    alert("Gagal memuat data dari Spreadsheet.");
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                document.getElementById('loading').innerHTML = '<p class="text-danger">Terjadi kesalahan jaringan saat mengambil data.</p>';
+            }
+        }
+
+        // Warna-warni yang lebih banyak dan menarik untuk grafik
+        const colors = [
+            'rgba(59, 130, 246, 0.8)', // Biru
+            'rgba(16, 185, 129, 0.8)', // Hijau emerald
+            'rgba(245, 158, 11, 0.8)', // Kuning/Amber
+            'rgba(239, 68, 68, 0.8)',  // Merah
+            'rgba(139, 92, 246, 0.8)', // Ungu
+            'rgba(236, 72, 153, 0.8)', // Pink
+            'rgba(14, 165, 233, 0.8)', // Sky blue
+            'rgba(249, 115, 22, 0.8)', // Orange
+            'rgba(168, 85, 247, 0.8)', // Purple
+            'rgba(20, 184, 166, 0.8)'  // Teal
+        ];
+        const borderColors = colors.map(c => c.replace('0.8', '1'));
+
+        function processAndDrawCharts(dataList) {
+            // Data list adalah array of objects: { kecamatan, kabupaten, gaya_belajar, tanggal }
+            
+            let counts = {
+                kecamatan: {},
+                kabupaten: {},
+                gaya_belajar: {},
+                tanggal: {}
+            };
+
+            // Menghitung jumlah per kategori
+            dataList.forEach(item => {
+                // Bersihkan teks kosong
+                let kec = item.kecamatan ? item.kecamatan.trim() : "Tidak Diisi";
+                let kab = item.kabupaten ? item.kabupaten.trim() : "Tidak Diisi";
+                let gaya = item.gaya_belajar ? item.gaya_belajar.trim() : "Belum Jelas";
+                let tgl = item.tanggal ? item.tanggal.trim() : "Tanpa Tanggal";
+                
+                if (!kec) kec = "Tidak Diisi";
+                if (!kab) kab = "Tidak Diisi";
+                if (!gaya) gaya = "Belum Jelas";
+                
+                // Grouping
+                counts.kecamatan[kec] = (counts.kecamatan[kec] || 0) + 1;
+                counts.kabupaten[kab] = (counts.kabupaten[kab] || 0) + 1;
+                counts.gaya_belajar[gaya] = (counts.gaya_belajar[gaya] || 0) + 1;
+                counts.tanggal[tgl] = (counts.tanggal[tgl] || 0) + 1;
+            });
+
+            // Fungsi pembantu untuk membuat grafik
+            function createChart(ctxId, type, dataObj, labelText) {
+                const labels = Object.keys(dataObj);
+                const dataVals = Object.values(dataObj);
+                
+                new Chart(document.getElementById(ctxId), {
+                    type: type,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: labelText,
+                            data: dataVals,
+                            backgroundColor: colors,
+                            borderColor: borderColors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: type === 'pie', // sembunyikan legend untuk bar chart
+                                position: 'bottom',
+                                labels: { color: '#cbd5e1', padding: 20 }
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                top: 10,
+                                bottom: 10,
+                                left: 10,
+                                right: 10
+                            }
+                        },
+                        scales: type === 'bar' ? {
+                            y: { beginAtZero: true, ticks: { color: '#cbd5e1', stepSize: 1 } },
+                            x: { ticks: { color: '#cbd5e1' } }
+                        } : {}
+                    }
+                });
+            }
+
+            // Menggambar seluruh grafik
+            createChart('barKecamatan', 'bar', counts.kecamatan, 'Jumlah Peserta');
+            createChart('pieKecamatan', 'pie', counts.kecamatan, 'Jumlah Peserta');
+            
+            createChart('barKabupaten', 'bar', counts.kabupaten, 'Jumlah Peserta');
+            createChart('pieKabupaten', 'pie', counts.kabupaten, 'Jumlah Peserta');
+            
+            createChart('barGayaBelajar', 'bar', counts.gaya_belajar, 'Jumlah Siswa');
+            createChart('pieGayaBelajar', 'pie', counts.gaya_belajar, 'Jumlah Siswa');
+            
+            // Urutkan tanggal
+            let sortedDates = {};
+            Object.keys(counts.tanggal).sort().forEach(k => {
+                sortedDates[k] = counts.tanggal[k];
+            });
+            createChart('barPengunjung', 'bar', sortedDates, 'Jumlah Pengunjung per Hari');
+        }
+    </script>
+</body>
+</html>

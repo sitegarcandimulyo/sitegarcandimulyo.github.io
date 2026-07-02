@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumber Informasi Gaya Belajar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --visual-color: #06b6d4;
+            --auditory-color: #f97316;
+            --kinesthetic-color: #ec4899;
+            --title-color: #10b981;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a, #312e81, #1e1b4b, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- LANDING VIEW --- */
+        #landing-view {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .illustration {
+            position: absolute;
+            left: -5%;
+            bottom: -5%;
+            width: 40%;
+            max-width: 500px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .landing-content {
+            z-index: 2;
+            max-width: 1000px;
+            width: 100%;
+            margin-left: 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .badge-top {
+            background: linear-gradient(90deg, #d946ef, #ec4899);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        .main-title {
+            color: var(--title-color);
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin: 0 0 15px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .main-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            line-height: 1.6;
+        }
+
+        .top-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .top-buttons button {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-buttons button:hover {
+            background: rgba(51, 65, 85, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .icon-blue { color: #3b82f6; }
+        .icon-purple { color: #a855f7; }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            width: 100%;
+        }
+
+        .style-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .style-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .style-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+        }
+
+        .card-visual { box-shadow: 0 10px 30px rgba(6, 182, 212, 0.1); }
+        .card-visual::before { background: var(--visual-color); }
+        .card-visual:hover { box-shadow: 0 15px 40px rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.3); }
+
+        .card-auditory { box-shadow: 0 10px 30px rgba(249, 115, 22, 0.1); }
+        .card-auditory::before { background: var(--auditory-color); }
+        .card-auditory:hover { box-shadow: 0 15px 40px rgba(249, 115, 22, 0.2); border-color: rgba(249, 115, 22, 0.3); }
+
+        .card-kinesthetic { box-shadow: 0 10px 30px rgba(236, 72, 153, 0.1); }
+        .card-kinesthetic::before { background: var(--kinesthetic-color); }
+        .card-kinesthetic:hover { box-shadow: 0 15px 40px rgba(236, 72, 153, 0.2); border-color: rgba(236, 72, 153, 0.3); }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px currentColor;
+        }
+        
+        .card-visual .card-icon { color: var(--visual-color); }
+        .card-auditory .card-icon { color: var(--auditory-color); }
+        .card-kinesthetic .card-icon { color: var(--kinesthetic-color); }
+
+        .style-card h3 {
+            font-size: 1.5rem;
+            margin: 0 0 15px 0;
+            color: white;
+        }
+
+        .card-visual h3 { color: var(--visual-color); }
+        .card-auditory h3 { color: var(--auditory-color); }
+        .card-kinesthetic h3 { color: var(--kinesthetic-color); }
+
+        .style-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .btn-mulai {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-visual .btn-mulai { background: var(--visual-color); box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3); }
+        .card-visual .btn-mulai:hover { background: #0891b2; }
+
+        .card-auditory .btn-mulai { background: var(--auditory-color); box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3); }
+        .card-auditory .btn-mulai:hover { background: #ea580c; }
+
+        .card-kinesthetic .btn-mulai { background: var(--kinesthetic-color); box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); }
+        .card-kinesthetic .btn-mulai:hover { background: #db2777; }
+
+        /* --- DETAIL VIEW (Modernized) --- */
+        #detail-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .container h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 0px;
+            text-align: center;
+        }
+        
+        .container > p {
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .source-section {
+            border-radius: 15px;
+            padding: 25px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            display: none;
+        }
+        
+        #visual-source h2 { color: var(--visual-color); }
+        #auditory-source h2 { color: var(--auditory-color); }
+        #kinesthetic-source h2 { color: var(--kinesthetic-color); }
+
+        .source-section h2 {
+            font-size: 1.8rem;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .source-section h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .source-section .tips-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .tips-section h4 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .tips-section li {
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .tips-section li::before {
+            content: "•";
+            color: var(--title-color);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .reco-item {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 4px solid;
+            transition: transform 0.2s;
+        }
+
+        #visual-source .reco-item { border-left-color: var(--visual-color); }
+        #auditory-source .reco-item { border-left-color: var(--auditory-color); }
+        #kinesthetic-source .reco-item { border-left-color: var(--kinesthetic-color); }
+
+        .reco-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .reco-item h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #visual-source .reco-item h4 i { color: var(--visual-color); }
+        #auditory-source .reco-item h4 i { color: var(--auditory-color); }
+        #kinesthetic-source .reco-item h4 i { color: var(--kinesthetic-color); }
+
+        .reco-item p {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .source-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .source-links a {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .source-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .action-buttons button {
+            padding: 12px 25px;
+            border-radius: 30px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .action-buttons button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        #download-word-btn { background: #10b981; }
+        #download-word-btn:hover { background: #059669; }
+        
+        #tegas-optimal-ai-btn { background: #3b82f6; }
+        #tegas-optimal-ai-btn:hover { background: #2563eb; }
+
+        @media (max-width: 1024px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .landing-content {
+                margin-left: 0;
+            }
+            .illustration {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .main-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    
+    <div id="landing-view">
+        <img src="students_music.png" alt="Students" class="illustration">
+        <div class="landing-content">
+            <div class="badge-top">KELAS 1 - BAB 1: SUMBER BUNYI</div>
+            <h1 class="main-title"><i class="fas fa-music"></i> SUMBER BUNYI</h1>
+            <p class="main-subtitle">Selamat datang di misi pembelajaran interaktif! Silakan pilih kartu sesuai dengan kelompok gaya belajarmu hari ini.</p>
+            
+            <div class="top-buttons">
+                <button><i class="fas fa-book icon-blue"></i> MATERI SUMBER BUNYI</button>
+                <button><i class="fas fa-play icon-purple"></i> VIDEO SUMBER BUNYI</button>
+            </div>
+
+            <div class="cards-grid">
+                <div class="style-card card-visual">
+                    <div class="card-icon"><i class="fas fa-eye"></i></div>
+                    <h3>Kelompok Visual</h3>
+                    <p>Mengerjakan tantangan dengan mengamati gambar dan kartu visual.</p>
+                    <button class="btn-mulai" onclick="showSection('Visual')">MULAI MISI</button>
+                </div>
+                
+                <div class="style-card card-auditory">
+                    <div class="card-icon"><i class="fas fa-headphones"></i></div>
+                    <h3>Kelompok Auditori</h3>
+                    <p>Mengerjakan tantangan dengan mendengarkan rekaman dan simulasi suara.</p>
+                    <button class="btn-mulai" onclick="showSection('Auditori')">MULAI MISI</button>
+                </div>
+
+                <div class="style-card card-kinesthetic">
+                    <div class="card-icon"><i class="fas fa-hand-pointer"></i></div>
+                    <h3>Kelompok Kinestetik</h3>
+                    <p>Mengerjakan tantangan dengan aktivitas fisik menyusun dan menggeser benda.</p>
+                    <button class="btn-mulai" onclick="showSection('Kinestetik')">MULAI MISI</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="detail-view" style="display: none;">
+
+        <div class="container">
+        <h1 id="source-title">Sumber Informasi Gaya Belajar</h1>
+        <p id="source-intro-text"></p>
+
+                                <div id="auditory-source" class="source-section">
+            <h2>Selamat Datang di Dunia Auditori! 🎧</h2>
+            <p class="intro-text">Wah, telingamu sangat peka seperti pahlawan super! Setiap suara dan nada adalah kunci ajaibmu untuk belajar banyak hal baru.</p>
+            
+            <h3>Deskripsi Gaya Belajar Auditori</h3>
+            <p>Kamu adalah sang <strong>Pendengar Hebat</strong>! Anak dengan gaya belajar Auditori paling mudah memahami pelajaran dengan cara mendengarkan. Kamu mungkin sangat suka mendengarkan dongeng, bernyanyi, menghafal lewat lagu, atau mengobrol bersama teman dan guru. Suara yang kamu dengar akan menempel kuat di ingatanmu!</p>
+
+            <div class="tips-section" style="background-color: #fff3e0; border-left: 5px solid #ff9800; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h4 style="color: #e65100;">🌟 Kata-Kata Semangat Untukmu!</h4>
+                <p style="font-style: italic; color: #424242;">"Teruslah bernyanyi, bercerita, dan mendengarkan hal-hal hebat. Jadikan suaramu sebagai kekuatanmu untuk meraih mimpi. Semangat belajarnya, jagoan!"</p>
+            </div>
+
+            <div class="tips-section">
+                <h4>Cara Belajar Paling Seru:</h4>
+                <ul>
+                    <li>Rekam suaramu saat membaca materi lalu dengarkan kembali sebelum tidur</li>
+                    <li>Gunakan irama atau lagu asyik untuk menghafal rumus dan istilah penting</li>
+                    <li>Ajak teman atau orang tua untuk berdiskusi tentang topik pelajaran baru</li>
+                    <li>Bacalah buku pelajaran dengan suara lantang layaknya sedang bercerita</li>
+                    <li>Buatlah kelompok belajar kecil untuk saling melakukan tanya jawab langsung</li>
+                </ul>
+            </div>
+
+            <div class="reco-item">
+                <h4>Interactive Learning Apps</h4>
+                <p>Aplikasi pembelajaran interaktif (Termasuk video & lagu edukasi anak).</p>
+                <div class="source-links">
+                    <a href="https://www.youtube.com/c/NussaOfficial" target="_blank"><i class="fas fa-play-circle"></i> Nussa (Cerita & Lagu Anak)</a>
+                    <a href="https://www.youtube.com/c/LaguAnakIndonesiaBalita" target="_blank"><i class="fas fa-music"></i> Lagu Anak Indonesia Edukasi</a>
+                    <a href="https://quizizz.com/" target="_blank"><i class="fas fa-gamepad"></i> Quizizz (Kuis Bersuara)</a>
+                </div>
+            </div>
+
+            <div class="reco-item">
+                <h4>DIY Project Platforms</h4>
+                <p>Platform untuk proyek pembelajaran hands-on dan mendengarkan cerita.</p>
+                <div class="source-links">
+                    <a href="https://reader.letsreadasia.org/" target="_blank"><i class="fas fa-book-reader"></i> Let's Read Asia (Buku Bersuara)</a>
+                    <a href="https://open.spotify.com/genre/kids-family" target="_blank"><i class="fab fa-spotify"></i> Podcast Cerita Anak (Spotify)</a>
+                    <a href="https://musiclab.chromeexperiments.com/" target="_blank"><i class="fas fa-guitar"></i> Chrome Music Lab</a>
+                </div>
+            </div>
+
+            <div class="reco-item">
+                <h4>Virtual Labs</h4>
+                <p>Laboratorium virtual untuk eksperimen (Fokus pada suara dan pendengaran).</p>
+                <div class="source-links">
+                    <a href="https://phet.colorado.edu/in/simulations/filter?subjects=sound" target="_blank"><i class="fas fa-wave-square"></i> PhET (Simulasi Gelombang & Suara)</a>
+                    <a href="https://www.labster.com/" target="_blank"><i class="fas fa-microscope"></i> Labster (Virtual Lab Interaktif)</a>
+                </div>
+            </div>
+        </div>
+
+                <div id="visual-source" class="source-section">
+            <h2>Selamat Datang di Dunia Visual! 🎨</h2>
+            <p class="intro-text">Hebat sekali! Matamu bisa menangkap warna dan gambar bagaikan kamera canggih! Dunia ini penuh dengan warna untukmu.</p>
+            
+            <h3>Deskripsi Gaya Belajar Visual</h3>
+            <p>Kamu adalah sang <strong>Pengamat Cerdas</strong>! Anak dengan gaya belajar Visual sangat mudah mengingat apa yang mereka lihat. Kamu menyukai gambar, warna-warni, poster, grafik, dan video animasi. Saat kamu melihat sesuatu yang indah dan rapi, otakmu akan merekamnya dengan sangat cepat!</p>
+
+            <div class="tips-section" style="background-color: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h4 style="color: #0d47a1;">🌟 Kata-Kata Semangat Untukmu!</h4>
+                <p style="font-style: italic; color: #424242;">"Ayo warnai dunia belajarmu dengan kreativitas tanpa batas! Jangan takut untuk mencoret-coret dan menggambar masa depanmu. Tetap semangat, sang pelukis hebat!"</p>
+            </div>
+
+            <div class="tips-section">
+                <h4>Cara Belajar Paling Seru:</h4>
+                <ul>
+                    <li>Buatlah mind mapping untuk setiap topik baru yang kamu pelajari</li>
+                    <li>Gunakan highlighter warna-warni untuk menandai poin penting</li>
+                    <li>Tempel poster atau infografis di dinding kamarmu</li>
+                    <li>Rekam penjelasan guru dalam bentuk sketsa atau diagram</li>
+                    <li>Buat flashcard dengan gambar dan warna menarik</li>
+                </ul>
+            </div>
+
+            <div class="reco-item">
+                <h4>Interactive Learning Apps</h4>
+                <p>Aplikasi pembelajaran interaktif (Termasuk akses gambar & game visual).</p>
+                <div class="source-links">
+                    <a href="https://quickdraw.withgoogle.com/" target="_blank"><i class="fas fa-pencil-alt"></i> Quick, Draw! (Game Tebak Gambar)</a>
+                    <a href="https://www.canva.com/id_id/pendidikan/" target="_blank"><i class="fas fa-palette"></i> Canva untuk Anak</a>
+                    <a href="https://reader.letsreadasia.org/" target="_blank"><i class="fas fa-book-open"></i> Let's Read Asia (Buku Cerita Bergambar)</a>
+                </div>
+            </div>
+
+            <div class="reco-item">
+                <h4>DIY Project Platforms</h4>
+                <p>Platform untuk proyek pembelajaran hands-on (Fokus pada animasi dan warna).</p>
+                <div class="source-links">
+                    <a href="https://www.youtube.com/c/KokBisa" target="_blank"><i class="fab fa-youtube"></i> Kok Bisa? (Video Edukasi Animasi)</a>
+                    <a href="https://www.youtube.com/c/HujanTandaTanya" target="_blank"><i class="fab fa-youtube"></i> Hujan Tanda Tanya (Sains Visual)</a>
+                    <a href="https://www.artforkidshub.com/" target="_blank"><i class="fas fa-paint-brush"></i> Art for Kids Hub (Tutorial Gambar)</a>
+                </div>
+            </div>
+
+            <div class="reco-item">
+                <h4>Virtual Labs</h4>
+                <p>Laboratorium virtual untuk eksperimen berbasis grafis dan pemetaan.</p>
+                <div class="source-links">
+                    <a href="https://earth.google.com/" target="_blank"><i class="fas fa-globe-americas"></i> Google Earth (Eksplorasi Peta)</a>
+                    <a href="https://phet.colorado.edu/" target="_blank"><i class="fas fa-shapes"></i> PhET (Simulasi Geometri & Optik)</a>
+                </div>
+            </div>
+        </div>
+
+                <div id="kinesthetic-source" class="source-section">
+            <h2>Selamat Datang di Dunia Kinestetik! 🏃‍♂️</h2>
+            <p class="intro-text">Wow, energimu sungguh luar biasa seperti atlet juara! Seluruh tubuhmu siap membawamu belajar lewat petualangan seru.</p>
+            
+            <h3>Deskripsi Gaya Belajar Kinestetik</h3>
+            <p>Kamu adalah sang <strong>Penjelajah Aktif</strong>! Anak dengan gaya belajar Kinestetik tidak suka hanya duduk diam. Kamu belajar paling baik saat tangan dan tubuhmu bergerak. Menyentuh benda, berlarian, merakit mainan, dan melakukan eksperimen langsung adalah cara paling ampuh buatmu untuk pintar!</p>
+
+            <div class="tips-section" style="background-color: #fce4ec; border-left: 5px solid #e91e63; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h4 style="color: #880e4f;">🌟 Kata-Kata Semangat Untukmu!</h4>
+                <p style="font-style: italic; color: #424242;">"Dunia ini adalah tempat bermain dan laboratorium raksasamu! Jangan pernah lelah bergerak, mencoba, dan berkreasi. Maju terus, sang penjelajah hebat!"</p>
+            </div>
+
+            <div class="tips-section">
+                <h4>Cara Belajar Paling Seru:</h4>
+                <ul>
+                    <li>Lakukan eksperimen secara langsung untuk menguji teori yang sedang dibahas</li>
+                    <li>Gunakan gerakan tubuh atau berjalan-jalan kecil saat sedang menghafal sesuatu</li>
+                    <li>Ambil waktu istirahat sejenak di sela belajar untuk sekadar meregangkan badan</li>
+                    <li>Buatlah model atau prakarya dari benda nyata terkait topik yang dipelajari</li>
+                    <li>Mainkan peran (role-play) bersama teman untuk mengingat sejarah atau cerita</li>
+                </ul>
+            </div>
+
+            <div class="reco-item">
+                <h4>Interactive Learning Apps</h4>
+                <p>Aplikasi pembelajaran interaktif yang harus disentuh, ditarik, dan digeser.</p>
+                <div class="source-links">
+                    <a href="https://wordwall.net/id" target="_blank"><i class="fas fa-hand-pointer"></i> Wordwall (Kuis Aktif Geser & Tarik)</a>
+                    <a href="https://kahoot.com/" target="_blank"><i class="fas fa-gamepad"></i> Kahoot! (Kuis Kompetisi Aktif)</a>
+                    <a href="https://education.minecraft.net/" target="_blank"><i class="fas fa-cubes"></i> Minecraft Education (Bangun Balok)</a>
+                </div>
+            </div>
+
+            <div class="reco-item">
+                <h4>DIY Project Platforms</h4>
+                <p>Platform untuk proyek pembelajaran hands-on (Senam dan Eksperimen Nyata).</p>
+                <div class="source-links">
+                    <a href="https://www.youtube.com/results?search_query=senam+anak+sd+ceria" target="_blank"><i class="fas fa-child"></i> Video Senam Anak SD Ceria</a>
+                    <a href="https://www.youtube.com/results?search_query=eksperimen+sains+anak+sd" target="_blank"><i class="fas fa-rocket"></i> Video Eksperimen Sains Anak</a>
+                    <a href="https://www.instructables.com/craft/" target="_blank"><i class="fas fa-hammer"></i> Instructables (Proyek Prakarya)</a>
+                </div>
+            </div>
+
+            <div class="reco-item">
+                <h4>Virtual Labs</h4>
+                <p>Laboratorium virtual untuk eksperimen langsung di layarmu.</p>
+                <div class="source-links">
+                    <a href="https://phet.colorado.edu/" target="_blank"><i class="fas fa-flask"></i> PhET Simulasi Interaktif</a>
+                    <a href="https://chemcollective.org/" target="_blank"><i class="fas fa-vial"></i> ChemCollective (Eksperimen Campur Warna)</a>
+                </div>
+            </div>
+        </div>
+
+        <p>Informasi mengenai gaya belajar ini didasarkan pada berbagai teori pendidikan dan psikologi belajar.</p>
+        <p>Sumber utama yang digunakan meliputi: </p>
+        <ul>
+            <li>Model VARK oleh Neil Fleming (Visual, Aural, Read/Write, Kinesthetic)</li>
+            <li>Teori Kecerdasan Majemuk (Multiple Intelligences) oleh Howard Gardner</li>
+            <li>Penelitian dan literatur tentang gaya belajar dari berbagai institusi pendidikan.</li>
+        </ul>
+        <div class="action-buttons">
+            <button id="back-to-reco-btn" onclick="window.history.back()">Kembali ke Rekomendasi</button>
+            <button id="download-word-btn" onclick="downloadHasilLengkapWord()"><i class="fas fa-download"></i> Download
+                Word</button>
+            <button id="tegas-optimal-ai-btn"
+                onclick="window.open('https://wampiaigayabelajar.netlify.app/', '_blank')">Si Tegar AI
+                Belajar</button>
+            <button id="mulai-ulang-btn" onclick="sessionStorage.clear(); window.location.href = 'index.html'">Mulai
+                Ulang</button>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- Libraries for Word Document Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const dominantStyle = urlParams.get('style');
+            const playerName = urlParams.get('name');
+
+            const sourceTitle = document.getElementById('source-title');
+            const sourceIntroText = document.getElementById('source-intro-text');
+            const backToRecoBtn = document.getElementById('back-to-reco-btn');
+
+            const auditorySourceSection = document.getElementById('auditory-source');
+            const visualSourceSection = document.getElementById('visual-source');
+            const kinestheticSourceSection = document.getElementById('kinesthetic-source');
+
+            const vCount = urlParams.get('v') || '';
+            const aCount = urlParams.get('a') || '';
+            const kCount = urlParams.get('k') || '';
+
+            if (playerName) {
+                sourceTitle.innerText = `Sumber Informasi untuk ${playerName}`;
+                sourceIntroText.innerText = `Berikut adalah sumber-sumber yang relevan dengan gaya belajar ${dominantStyle} Anda:`;
+            } else {
+                sourceTitle.innerText = "Sumber Informasi Gaya Belajar";
+                sourceIntroText.innerText = `Berikut adalah sumber-sumber terkait gaya belajar ${dominantStyle || 'umum'}:`;
+            }
+
+            
+            window.showSection = function(style) {
+                 const currentUrl = new URL(window.location.href);
+                 currentUrl.searchParams.set('style', style);
+                 window.location.href = currentUrl.href;
+            };
+
+            if (!dominantStyle) {
+                document.getElementById('landing-view').style.display = 'flex';
+                document.getElementById('detail-view').style.display = 'none';
+            } else {
+                document.getElementById('landing-view').style.display = 'none';
+                document.getElementById('detail-view').style.display = 'flex';
+            }
+
+            // Display relevant sections based on dominant style
+            const styles = dominantStyle ? dominantStyle.split('/') : [];
+
+            // Hide generic source text by default
+            document.querySelector('.container > p:nth-of-type(2)').style.display = 'none';
+            document.querySelector('.container > p:nth-of-type(3)').style.display = 'none';
+            document.querySelector('.container > ul').style.display = 'none';
+
+            if (styles.includes('Auditori')) {
+                auditorySourceSection.style.display = 'block';
+            }
+            if (styles.includes('Visual')) {
+                visualSourceSection.style.display = 'block';
+            }
+            if (styles.includes('Kinestetik')) {
+                kinestheticSourceSection.style.display = 'block';
+            }
+
+            // If no specific style sections are displayed, show generic source text
+            if (!styles.includes('Auditori') && !styles.includes('Visual') && !styles.includes('Kinestetik')) {
+                document.querySelector('.container > p:nth-of-type(2)').style.display = 'block';
+                document.querySelector('.container > p:nth-of-type(3)').style.display = 'block';
+                document.querySelector('.container > ul').style.display = 'block';
+            }
+
+            // Ensure back button preserves style, name, and score parameters
+            backToRecoBtn.onclick = function () {
+                window.location.href = `rekomendasi.html?style=${dominantStyle || ''}&name=${encodeURIComponent(playerName || '')}&v=${vCount}&a=${aCount}&k=${kCount}`;
+            };
+        });
+
+        // Function to download learning resources as colorful Word document
+                // Function to download complete results as colorful Word document
+        async function downloadHasilLengkapWord() {
+            const { Document, Packer, Paragraph, Table, TableRow, TableCell, AlignmentType, WidthType, ShadingType, HeadingLevel, TextRun, BorderStyle } = docx;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const playerName = urlParams.get('name') || 'Siswa';
+            const dominantStyle = urlParams.get('style') || 'Umum';
+            const vCount = parseInt(urlParams.get('v')) || 0;
+            const aCount = parseInt(urlParams.get('a')) || 0;
+            const kCount = parseInt(urlParams.get('k')) || 0;
+
+            const totalQuestions = vCount + aCount + kCount;
+            const percentV = totalQuestions > 0 ? ((vCount / totalQuestions) * 100).toFixed(0) : 0;
+            const percentA = totalQuestions > 0 ? ((aCount / totalQuestions) * 100).toFixed(0) : 0;
+            const percentK = totalQuestions > 0 ? ((kCount / totalQuestions) * 100).toFixed(0) : 0;
+
+            const today = new Date();
+            const tanggal = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+
+            const children = [];
+
+            // 1. HEADER
+            children.push(
+                new Paragraph({ text: "LAPORAN ANALISIS GAYA BELAJAR KOMPREHENSIF", heading: HeadingLevel.HEADING_1, alignment: AlignmentType.CENTER, spacing: { after: 400 }, shading: { type: ShadingType.SOLID, color: "4CAF50", fill: "4CAF50" } }),
+                new Paragraph({ text: `Nama Siswa: ${playerName}`, spacing: { after: 100 }, bold: true }),
+                new Paragraph({ text: `Tanggal Tes: ${tanggal}`, spacing: { after: 100 } }),
+                new Paragraph({ text: `Gaya Belajar Dominan: ${dominantStyle}`, spacing: { after: 300 }, bold: true }),
+                
+                new Paragraph({ text: "1. HASIL EVALUASI KUESIONER", heading: HeadingLevel.HEADING_2, alignment: AlignmentType.LEFT, spacing: { before: 200, after: 200 }, shading: { type: ShadingType.SOLID, color: "2196F3", fill: "2196F3" } }),
+                new Paragraph({ text: "Tabel di bawah ini menunjukkan proporsi jawaban Anda berdasarkan tiga gaya belajar utama. Gaya belajar dengan persentase tertinggi merupakan gaya belajar dominan Anda.", spacing: { after: 200 } })
+            );
+
+            const resultsTable = new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                rows: [
+                    new TableRow({
+                        children: [
+                            new TableCell({ children: [new Paragraph({ text: "Gaya Belajar", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: "2196F3", fill: "2196F3" }, width: { size: 30, type: WidthType.PERCENTAGE } }),
+                            new TableCell({ children: [new Paragraph({ text: "Skor", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: "2196F3", fill: "2196F3" }, width: { size: 20, type: WidthType.PERCENTAGE } }),
+                            new TableCell({ children: [new Paragraph({ text: "Persentase", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: "2196F3", fill: "2196F3" }, width: { size: 20, type: WidthType.PERCENTAGE } }),
+                            new TableCell({ children: [new Paragraph({ text: "Grafik Visual", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: "2196F3", fill: "2196F3" }, width: { size: 30, type: WidthType.PERCENTAGE } })
+                        ]
+                    }),
+                    new TableRow({
+                        children: [
+                            new TableCell({ children: [new Paragraph({ text: "Visual", alignment: AlignmentType.CENTER, bold: true })], shading: { type: ShadingType.SOLID, color: "E3F2FD", fill: "E3F2FD" } }),
+                            new TableCell({ children: [new Paragraph({ text: vCount.toString(), alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: "E3F2FD", fill: "E3F2FD" } }),
+                            new TableCell({ children: [new Paragraph({ text: `${percentV}%`, alignment: AlignmentType.CENTER, bold: true })], shading: { type: ShadingType.SOLID, color: "2196F3", fill: "2196F3" } }),
+                            new TableCell({ children: [new Paragraph({ text: "█".repeat(Math.round(percentV / 5)), alignment: AlignmentType.LEFT })], shading: { type: ShadingType.SOLID, color: "E3F2FD", fill: "E3F2FD" } })
+                        ]
+                    }),
+                    new TableRow({
+                        children: [
+                            new TableCell({ children: [new Paragraph({ text: "Auditori", alignment: AlignmentType.CENTER, bold: true })], shading: { type: ShadingType.SOLID, color: "FFF9C4", fill: "FFF9C4" } }),
+                            new TableCell({ children: [new Paragraph({ text: aCount.toString(), alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: "FFF9C4", fill: "FFF9C4" } }),
+                            new TableCell({ children: [new Paragraph({ text: `${percentA}%`, alignment: AlignmentType.CENTER, bold: true })], shading: { type: ShadingType.SOLID, color: "FBC02D", fill: "FBC02D" } }),
+                            new TableCell({ children: [new Paragraph({ text: "█".repeat(Math.round(percentA / 5)), alignment: AlignmentType.LEFT })], shading: { type: ShadingType.SOLID, color: "FFF9C4", fill: "FFF9C4" } })
+                        ]
+                    }),
+                    new TableRow({
+                        children: [
+                            new TableCell({ children: [new Paragraph({ text: "Kinestetik", alignment: AlignmentType.CENTER, bold: true })], shading: { type: ShadingType.SOLID, color: "F3E5F5", fill: "F3E5F5" } }),
+                            new TableCell({ children: [new Paragraph({ text: kCount.toString(), alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: "F3E5F5", fill: "F3E5F5" } }),
+                            new TableCell({ children: [new Paragraph({ text: `${percentK}%`, alignment: AlignmentType.CENTER, bold: true })], shading: { type: ShadingType.SOLID, color: "9C27B0", fill: "9C27B0" } }),
+                            new TableCell({ children: [new Paragraph({ text: "█".repeat(Math.round(percentK / 5)), alignment: AlignmentType.LEFT })], shading: { type: ShadingType.SOLID, color: "F3E5F5", fill: "F3E5F5" } })
+                        ]
+                    })
+                ]
+            });
+            children.push(resultsTable);
+
+            const styles = dominantStyle ? dominantStyle.split('/') : [];
+            
+            // Helper functions for tables
+            const createRecoTable = (items, colorHead, colorBody1, colorBody2) => {
+                return new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph({ text: "Metode Spesifik", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: colorHead, fill: colorHead }, width: { size: 30, type: WidthType.PERCENTAGE } }),
+                                new TableCell({ children: [new Paragraph({ text: "Uraian & Cara Penerapan", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: colorHead, fill: colorHead }, width: { size: 70, type: WidthType.PERCENTAGE } })
+                            ]
+                        }),
+                        ...items.map(res => new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph({ text: res.metode, bold: true })], shading: { type: ShadingType.SOLID, color: colorBody1, fill: colorBody1 } }),
+                                new TableCell({ children: [new Paragraph({ text: res.penjelasan })], shading: { type: ShadingType.SOLID, color: colorBody2, fill: colorBody2 } })
+                            ]
+                        }))
+                    ]
+                });
+            };
+
+            const createListTable = (items, colorHead, colorBody) => {
+                return new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: [
+                        new TableRow({ children: [new TableCell({ children: [new Paragraph({ text: "Panduan Kebiasaan Belajar Harian (Tips Cepat)", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: colorHead, fill: colorHead } })] }),
+                        ...items.map(item => new TableRow({ children: [new TableCell({ children: [new Paragraph({ text: `• ${item}`, spacing: { before: 50, after: 50 } })], shading: { type: ShadingType.SOLID, color: colorBody, fill: colorBody } })] }))
+                    ]
+                });
+            };
+
+            const createSourceTableDetailed = (sources, colorHead, colorBody1, colorBody2) => {
+                return new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph({ text: "Kategori Platform", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: colorHead, fill: colorHead }, width: { size: 30, type: WidthType.PERCENTAGE } }),
+                                new TableCell({ children: [new Paragraph({ text: "Daftar Link & Aplikasi", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: colorHead, fill: colorHead }, width: { size: 40, type: WidthType.PERCENTAGE } }),
+                                new TableCell({ children: [new Paragraph({ text: "Manfaat Spesifik", bold: true, alignment: AlignmentType.CENTER })], shading: { type: ShadingType.SOLID, color: colorHead, fill: colorHead }, width: { size: 30, type: WidthType.PERCENTAGE } })
+                            ]
+                        }),
+                        ...sources.map(res => new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph({ text: res.kategori, bold: true })], shading: { type: ShadingType.SOLID, color: colorBody1, fill: colorBody1 } }),
+                                new TableCell({ children: [new Paragraph({ text: res.platform })], shading: { type: ShadingType.SOLID, color: colorBody2, fill: colorBody2 } }),
+                                new TableCell({ children: [new Paragraph({ text: res.manfaat })], shading: { type: ShadingType.SOLID, color: colorBody2, fill: colorBody2 } })
+                            ]
+                        }))
+                    ]
+                });
+            };
+
+            if (styles.includes('Visual')) {
+                children.push(new Paragraph({ text: "2. ANALISIS & REKOMENDASI: GAYA BELAJAR VISUAL", heading: HeadingLevel.HEADING_2, alignment: AlignmentType.LEFT, spacing: { before: 400, after: 150 }, shading: { type: ShadingType.SOLID, color: "2196F3", fill: "2196F3" } }));
+                children.push(new Paragraph({ text: "Profil Singkat: Sebagai pembelajar visual, Anda menyerap informasi paling optimal melalui apa yang Anda lihat. Gambar, diagram, warna, dan imajinasi keruangan adalah kekuatan utama Anda dalam memahami materi pelajaran.", spacing: { after: 200 } }));
+
+                const visualReco = [
+                    { metode: "Pembuatan Peta Konsep (Mind Mapping)", penjelasan: "Buatlah peta konsep secara mandiri. Gunakan berbagai cabang untuk menghubungkan ide pokok dengan detail-detailnya. Tambahkan ikon atau gambar kecil agar otak lebih mudah memanggil memori tersebut saat ujian." },
+                    { metode: "Kartu Flash Bergambar", penjelasan: "Gunakan kartu belajar dua sisi. Tulis istilah di satu sisi dan gambarkan wujud atau diagramnya di sisi lain. Ini akan memperkuat hubungan kognitif antara kata dan visual." },
+                    { metode: "Eksplorasi Video Animasi", penjelasan: "Sains atau sejarah terkadang membosankan jika hanya dibaca. Tontonlah video dokumenter atau animasi edukasi agar Anda dapat 'melihat' langsung bagaimana konsep tersebut bekerja." },
+                    { metode: "Sistem Kode Warna", penjelasan: "Berikan warna pada catatanmu! Gunakan stabilo kuning untuk definisi, hijau untuk contoh, dan merah untuk rumus penting. Warna akan menyortir memori secara otomatis." }
+                ];
+                children.push(createRecoTable(visualReco, "2196F3", "E3F2FD", "FFFFFF"));
+                
+                children.push(new Paragraph({ text: "", spacing: { after: 200 } }));
+                const visualTips = [
+                    "Selalu buat mind mapping berwarna untuk merangkum bab pelajaran yang panjang",
+                    "Tandai buku paketmu menggunakan highlighter warna-warni secara konsisten",
+                    "Hias dinding kamar belajarmu dengan poster edukasi atau tabel periodik",
+                    "Jika guru sedang bercerita, cobalah mencoret-coret sketsa dari cerita tersebut",
+                    "Gunakan aplikasi digital berbasis gambar untuk melatih kreativitasmu"
+                ];
+                children.push(createListTable(visualTips, "1976D2", "E3F2FD"));
+                
+                children.push(new Paragraph({ text: "3. DIREKTORI SUMBER BELAJAR VISUAL", heading: HeadingLevel.HEADING_2, alignment: AlignmentType.LEFT, spacing: { before: 400, after: 200 }, shading: { type: ShadingType.SOLID, color: "2196F3", fill: "2196F3" } }));
+                const visualSources = [
+                    { kategori: "Interactive Learning Apps", platform: `Quick Draw! (Tebak Gambar)
+Canva untuk Pendidikan
+Let's Read Asia (Cerita Visual)`, manfaat: "Melatih imajinasi keruangan dan kreativitas desain secara interaktif." },
+                    { kategori: "DIY Project Platforms", platform: `Kok Bisa? (Animasi YouTube)
+Hujan Tanda Tanya
+Art for Kids Hub`, manfaat: "Menyediakan visualisasi tajam untuk menjelaskan fenomena rumit." },
+                    { kategori: "Virtual Labs", platform: `Google Earth
+PhET (Simulasi Geometri)`, manfaat: "Mengeksplorasi bentuk dan struktur benda dari layar Anda secara 3D." }
+                ];
+                children.push(createSourceTableDetailed(visualSources, "2196F3", "E3F2FD", "FFFFFF"));
+                
+                children.push(new Paragraph({ text: "Pesan Semangat: Teruslah berkreasi dengan imajinasimu yang luar biasa! Warnai setiap proses belajarmu dengan ceria karena dunia ini adalah kanvas besarmu! 🎨✨", spacing: { before: 300, after: 100 }, bold: true, alignment: AlignmentType.CENTER }));
+            }
+
+            if (styles.includes('Auditori')) {
+                children.push(new Paragraph({ text: "2. ANALISIS & REKOMENDASI: GAYA BELAJAR AUDITORI", heading: HeadingLevel.HEADING_2, alignment: AlignmentType.LEFT, spacing: { before: 400, after: 150 }, shading: { type: ShadingType.SOLID, color: "FBC02D", fill: "FBC02D" } }));
+                children.push(new Paragraph({ text: "Profil Singkat: Sebagai pembelajar auditori, pendengaran adalah senjata utamamu. Anda sangat peka terhadap nada suara, ritme, dan lebih mudah mencerna materi melalui diskusi, mendengarkan cerita, atau penjelasan lisan.", spacing: { after: 200 } }));
+
+                const auditoryReco = [
+                    { metode: "Teknik Membaca Bersuara", penjelasan: "Jangan membaca dalam hati. Bacalah buku catatan atau materi pelajaran dengan suara lantang yang jelas. Telinga Anda akan merekam suara Anda sendiri dan mengubahnya menjadi ingatan jangka panjang." },
+                    { metode: "Diskusi & Kelompok Belajar", penjelasan: "Bentuklah kelompok belajar. Menjelaskan materi kepada teman atau mendengarkan teman berpendapat akan membuat materi jauh lebih mudah menempel di kepala Anda." },
+                    { metode: "Audio & Podcast Edukasi", penjelasan: "Ganti kebiasaan membaca buku tebal dengan mendengarkan audiobook atau rekaman guru saat sedang bersantai atau dalam perjalanan." },
+                    { metode: "Irama & Jembatan Keledai", penjelasan: "Ubah daftar hafalan yang membosankan menjadi lagu singkat yang asyik. Rima dan nada musik mempercepat proses penyerapan informasi." }
+                ];
+                children.push(createRecoTable(auditoryReco, "FBC02D", "FFF9C4", "FFFFFF"));
+                
+                children.push(new Paragraph({ text: "", spacing: { after: 200 } }));
+                const auditoryTips = [
+                    "Selalu rekam suaramu saat membaca rangkuman dan dengarkan sebelum tidur",
+                    "Gunakan irama lagu favoritmu untuk menghafal rumus-rumus matematika",
+                    "Ajak orang tua atau saudara berdiskusi ringan mengenai apa yang baru kamu pelajari",
+                    "Gunakan fitur 'Text-to-Speech' di HP untuk membacakan artikel panjang",
+                    "Bermain kuis tebak-tebakan lisan dengan teman akan sangat menyenangkan"
+                ];
+                children.push(createListTable(auditoryTips, "F57F17", "FFF9C4"));
+
+                children.push(new Paragraph({ text: "3. DIREKTORI SUMBER BELAJAR AUDITORI", heading: HeadingLevel.HEADING_2, alignment: AlignmentType.LEFT, spacing: { before: 400, after: 200 }, shading: { type: ShadingType.SOLID, color: "FBC02D", fill: "FBC02D" } }));
+                const auditorySources = [
+                    { kategori: "Interactive Learning Apps", platform: `Nussa (Lagu Edukasi)
+Lagu Anak Indonesia
+Quizizz (Kuis Bersuara)`, manfaat: "Menyediakan input suara dan lagu yang ritmis untuk daya ingat." },
+                    { kategori: "DIY Project Platforms", platform: `Let's Read Asia (Audiobook)
+Podcast Edukasi Anak
+Chrome Music Lab`, manfaat: "Eksplorasi nada dan mendengarkan cerita tanpa harus lelah membaca." },
+                    { kategori: "Virtual Labs", platform: `PhET (Simulasi Suara)
+Labster (Instruksi Audio)`, manfaat: "Fokus pada pendengaran untuk bereksperimen dengan gelombang suara." }
+                ];
+                children.push(createSourceTableDetailed(auditorySources, "FBC02D", "FFF9C4", "FFFFFF"));
+
+                children.push(new Paragraph({ text: "Pesan Semangat: Jadikan setiap pelajaran sebagai melodi yang indah! Jangan ragu untuk selalu bersuara dan berdiskusi. Dunia menantikan ide-ide brilianmu! 🎧🗣️", spacing: { before: 300, after: 100 }, bold: true, alignment: AlignmentType.CENTER }));
+            }
+
+            if (styles.includes('Kinestetik')) {
+                children.push(new Paragraph({ text: "2. ANALISIS & REKOMENDASI: GAYA BELAJAR KINESTETIK", heading: HeadingLevel.HEADING_2, alignment: AlignmentType.LEFT, spacing: { before: 400, after: 150 }, shading: { type: ShadingType.SOLID, color: "9C27B0", fill: "9C27B0" } }));
+                children.push(new Paragraph({ text: "Profil Singkat: Sebagai pembelajar kinestetik, tubuh dan tangan Anda tidak bisa diam! Anda belajar paling efektif melalui sentuhan, gerakan fisik, eksperimen langsung, dan praktik lapangan (learning by doing).", spacing: { after: 200 } }));
+
+                const kinesReco = [
+                    { metode: "Integrasi Aktivitas Fisik", penjelasan: "Saat sedang menghafal, jangan duduk diam. Cobalah berjalan bolak-balik di dalam kamar, memantulkan bola basket, atau menggunakan fidget spinner. Gerakan akan merangsang kerja otakmu." },
+                    { metode: "Simulasi & Role-Playing", penjelasan: "Peragakan materi yang sedang dipelajari layaknya seorang aktor. Jika belajar sejarah, jadilah tokoh utamanya. Jika belajar biologi, peragakan cara kerja sel tubuh." },
+                    { metode: "Konstruksi Model 3D", penjelasan: "Ubah materi abstrak menjadi wujud nyata. Gunakan plastisin, stik es krim, atau balok lego untuk membangun model dari topik pelajaran (misal: tata surya atau struktur bangunan)." },
+                    { metode: "Eksperimen Lapangan", penjelasan: "Terjun langsung adalah cara terbaik. Tanam biji kacang hijau secara nyata daripada hanya membaca proses fotosintesis. Lakukan eksperimen sains sederhana di dapur." }
+                ];
+                children.push(createRecoTable(kinesReco, "9C27B0", "F3E5F5", "FFFFFF"));
+
+                children.push(new Paragraph({ text: "", spacing: { after: 200 } }));
+                const kinestheticTips = [
+                    "Lakukan uji coba praktis dan eksperimen sains setiap akhir pekan",
+                    "Gunakan gerakan tangan yang ekspresif saat mengingat sebuah daftar hafalan",
+                    "Ambil waktu istirahat (stretching) setiap 20 menit agar tubuh tidak pegal",
+                    "Ubah tugas sekolah menjadi proyek seni atau prakarya 3 Dimensi",
+                    "Jadilah relawan untuk maju ke depan kelas dan mempraktikkan pelajaran"
+                ];
+                children.push(createListTable(kinestheticTips, "7B1FA2", "F3E5F5"));
+
+                children.push(new Paragraph({ text: "3. DIREKTORI SUMBER BELAJAR KINESTETIK", heading: HeadingLevel.HEADING_2, alignment: AlignmentType.LEFT, spacing: { before: 400, after: 200 }, shading: { type: ShadingType.SOLID, color: "9C27B0", fill: "9C27B0" } }));
+                const kinestheticSources = [
+                    { kategori: "Interactive Learning Apps", platform: `Wordwall (Kuis Tarik-Geser)
+Kahoot! (Kuis Cepat)
+Minecraft Education`, manfaat: "Aktivitas motorik pada jari untuk menyeret objek dan berkompetisi." },
+                    { kategori: "DIY Project Platforms", platform: `Video Senam Edukasi
+Eksperimen Sains Anak
+Instructables (Prakarya)`, manfaat: "Memberikan panduan langkah-demi-langkah untuk membuat sesuatu secara fisik." },
+                    { kategori: "Virtual Labs", platform: `PhET (Simulasi Interaktif)
+ChemCollective`, manfaat: "Menggeser tuas dan mencampur cairan dalam laboratorium virtual." }
+                ];
+                children.push(createSourceTableDetailed(kinestheticSources, "9C27B0", "F3E5F5", "FFFFFF"));
+
+                children.push(new Paragraph({ text: "Pesan Semangat: Jangan takut untuk terus bergerak dan bereksperimen! Dunia ini adalah laboratorium besarmu. Teruslah berkarya melalui sentuhan tanganmu! 🏃‍♂️🔬", spacing: { before: 300, after: 100 }, bold: true, alignment: AlignmentType.CENTER }));
+            }
+
+            // Create and download document
+            const doc = new Document({ sections: [{ properties: {}, children: children }] });
+            const blob = await Packer.toBlob(doc);
+            saveAs(blob, `HasilLengkapGayaBelajar_${dominantStyle}_${playerName}_${tanggal}.docx`);
+        }
+        </script>
+</body>
+
+</html>

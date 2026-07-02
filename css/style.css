@@ -1,0 +1,328 @@
+
+:root {
+    --bg-color: #0f172a;
+    --card-bg: rgba(255, 255, 255, 0.08);
+    --card-hover: rgba(255, 255, 255, 0.15);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --visual-color: #06b6d4;
+    --auditory-color: #f97316;
+    --kinesthetic-color: #ec4899;
+    --title-color: #10b981;
+    --primary-gradient: linear-gradient(135deg, #3b82f6, #2dd4bf);
+}
+
+body {
+    background: linear-gradient(-45deg, #0f172a, #1e3a8a, #854d0e, #064e3b, #4c1d95, #0f172a);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-attachment: fixed;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- Header & Navbar --- */
+.navbar {
+    background: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.navbar-brand {
+    color: #ffffff !important;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    color: var(--text-muted) !important;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* --- General Components --- */
+.btn-primary {
+    background: var(--primary-gradient);
+    border: none;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    color: #ffffff;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    padding: 10px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shine effect on hover */
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    transition: all 0.5s ease;
+    z-index: 1;
+}
+
+.btn-primary:hover::before {
+    left: 150%;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2dd4bf, #3b82f6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.btn-outline-primary {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    border-radius: 25px;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3b82f6;
+    color: #ffffff;
+}
+
+.bg-white {
+    background-color: var(--card-bg) !important;
+}
+
+/* --- Hero Section (Index) --- */
+.hero-section {
+    padding: 4rem 2rem;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 25px;
+    margin: 3rem auto;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.hero-section h1 {
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    font-weight: 900;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.hero-section p {
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    font-size: 1.2rem;
+}
+
+/* --- Containers --- */
+.questionnaire-container,
+.result-container,
+.recommendation-container,
+.sources-container,
+.log-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.questionnaire-container h2,
+.result-container h2,
+.recommendation-container h2,
+.sources-container h2,
+.log-container h2 {
+    color: #ffffff;
+    font-weight: 800;
+}
+
+/* --- Questionnaire Options --- */
+.option-btn {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    color: var(--text-main);
+    font-weight: 500;
+    text-align: left;
+    padding: 1.2rem;
+    border-radius: 12px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.option-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    transition: all 0.6s ease;
+    z-index: 1;
+}
+
+.option-btn:hover {
+    background: var(--card-hover);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.option-btn:hover::before {
+    left: 150%;
+}
+
+.option-btn.selected {
+    background: var(--primary-gradient) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
+}
+
+.progress {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 1.5rem 0;
+}
+
+.progress-bar {
+    background: var(--primary-gradient);
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* --- Cards (Recommendations/Log) --- */
+.card, .recommendation-card, .source-card, .log-entry-card {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    color: var(--text-main);
+    text-align: left;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before, .recommendation-card::before, .source-card::before, .log-entry-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    transition: all 0.7s ease;
+    z-index: 1;
+}
+
+.card:hover, .recommendation-card:hover, .source-card:hover, .log-entry-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.card:hover::before, .recommendation-card:hover::before, .source-card:hover::before, .log-entry-card:hover::before {
+    left: 150%;
+}
+
+.card-title {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.card-text {
+    color: var(--text-muted);
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* --- Learning Style Specific Colors --- */
+.visual-rec { border-left: 5px solid var(--visual-color); }
+.visual-rec i { color: var(--visual-color); }
+
+.auditory-rec { border-left: 5px solid var(--auditory-color); }
+.auditory-rec i { color: var(--auditory-color); }
+
+.kinesthetic-rec { border-left: 5px solid var(--kinesthetic-color); }
+.kinesthetic-rec i { color: var(--kinesthetic-color); }
+
+/* --- Alert Messages --- */
+.alert {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-radius: 12px;
+}
+
+.alert-info {
+    background: rgba(6, 182, 212, 0.1);
+    border-color: rgba(6, 182, 212, 0.3);
+    color: #67e8f9;
+}
+
+/* --- Forms & Feedback --- */
+.form-label {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.form-control, .form-select {
+    background-color: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-radius: 10px;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: rgba(15, 23, 42, 1);
+    border-color: var(--visual-color);
+    color: #ffffff;
+    box-shadow: 0 0 0 0.25rem rgba(6, 182, 212, 0.25);
+}
+
+/* Rating Stars */
+.rating i {
+    color: rgba(255, 255, 255, 0.2);
+}
+.rating i.selected, .rating i:hover {
+    color: #fbbf24; /* Golden yellow */
+}
+
+/* --- Text colors overriding defaults --- */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+}
+
+p, label {
+    color: var(--text-muted);
+}
