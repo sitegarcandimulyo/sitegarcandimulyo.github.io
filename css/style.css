@@ -12,6 +12,15 @@
     --primary-gradient: linear-gradient(135deg, #3b82f6, #2dd4bf);
 }
 
+/* --- BASE RESET --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background: linear-gradient(-45deg, #0f172a, #1e3a8a, #854d0e, #064e3b, #4c1d95, #0f172a);
     background-size: 400% 400%;
@@ -22,6 +31,7 @@ body {
     margin: 0;
     padding: 0;
     background-attachment: fixed;
+    overflow-x: hidden;
 }
 
 @keyframes gradientBG {
@@ -110,14 +120,15 @@ body {
 
 /* --- Hero Section (Index) --- */
 .hero-section {
-    padding: 4rem 2rem;
+    padding: clamp(1.5rem, 4vh, 4rem) clamp(1rem, 3vw, 2rem);
     background: var(--card-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 25px;
-    margin: 3rem auto;
+    margin: clamp(1rem, 3vh, 3rem) auto;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.15);
+    width: 100%;
 }
 
 .hero-section h1 {
@@ -125,12 +136,13 @@ body {
     margin-bottom: 1.5rem;
     font-weight: 900;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    font-size: clamp(1.4rem, 4vw, 3rem);
 }
 
 .hero-section p {
     color: var(--text-muted);
     margin-bottom: 2.5rem;
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
 }
 
 /* --- Containers --- */
@@ -139,13 +151,13 @@ body {
 .recommendation-container,
 .sources-container,
 .log-container {
-    max-width: 800px;
+    max-width: min(800px, 95%);
     margin: 2rem auto;
     background: var(--card-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 20px;
-    padding: 2.5rem;
+    padding: clamp(1rem, 3vw, 2.5rem);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -168,11 +180,14 @@ body {
     color: var(--text-main);
     font-weight: 500;
     text-align: left;
-    padding: 1.2rem;
+    padding: clamp(0.75rem, 2vh, 1.2rem);
     border-radius: 12px;
     width: 100%;
     position: relative;
     overflow: hidden;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    min-height: 48px;
+    touch-action: manipulation;
 }
 
 .option-btn::before {
@@ -301,6 +316,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #ffffff;
     border-radius: 10px;
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .form-control:focus, .form-select:focus {
@@ -325,4 +341,115 @@ h1, h2, h3, h4, h5, h6 {
 
 p, label {
     color: var(--text-muted);
+}
+
+/* --- RESPONSIVE BREAKPOINTS --- */
+
+/* Mobile Portrait: ≤ 576px */
+@media (max-width: 576px) {
+    .hero-section {
+        margin: 0.75rem;
+        border-radius: 15px;
+    }
+
+    .hero-section img {
+        max-width: min(220px, 60vw) !important;
+    }
+
+    .btn-lg {
+        padding: 12px 24px !important;
+        font-size: clamp(0.9rem, 3vw, 1.1rem) !important;
+    }
+
+    .questionnaire-container,
+    .result-container,
+    .recommendation-container,
+    .sources-container,
+    .log-container {
+        margin: 0.75rem;
+        padding: 1rem;
+        border-radius: 15px;
+    }
+
+    /* Nav tombol lebih touch-friendly */
+    .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Large Display: Full HD 1920px+ */
+@media (min-width: 1920px) {
+    :root {
+        font-size: 18px;
+    }
+
+    .hero-section {
+        padding: 5rem 3rem;
+    }
+
+    .hero-section h1 {
+        font-size: clamp(2.5rem, 3vw, 4rem);
+    }
+
+    .questionnaire-container,
+    .result-container,
+    .recommendation-container {
+        max-width: 1000px;
+        padding: 3.5rem;
+    }
+
+    .option-btn {
+        padding: 1.5rem;
+        font-size: 1.15rem;
+        min-height: 64px;
+    }
+
+    .btn-primary {
+        padding: 14px 28px;
+        font-size: 1.1rem;
+    }
+}
+
+/* 4K Smartboard: 3840px+ */
+@media (min-width: 3840px) {
+    :root {
+        font-size: 24px;
+    }
+
+    .hero-section {
+        padding: 7rem 4rem;
+        border-radius: 40px;
+    }
+
+    .hero-section h1 {
+        font-size: clamp(3rem, 4vw, 5.5rem);
+    }
+
+    .questionnaire-container,
+    .result-container {
+        max-width: 1400px;
+        padding: 5rem;
+        border-radius: 30px;
+    }
+
+    .option-btn {
+        padding: 2rem;
+        font-size: 1.5rem;
+        min-height: 80px;
+        border-radius: 16px;
+    }
+
+    .btn-primary {
+        padding: 18px 40px;
+        font-size: 1.4rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.8rem;
+    }
+
+    .nav-link {
+        font-size: 1.3rem;
+    }
 }
